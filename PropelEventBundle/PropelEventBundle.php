@@ -41,6 +41,8 @@ class PropelEventBundle extends Bundle
     
     public function boot()
     {
+    	// set callback in proxy dispatcher,
+    	// so it can later get real dispatcher from container
     	EventDispatcherProxy::setDispatcherGetter(array($this->container, 'get'), array('glorpen.propel.event.dispatcher'));
     }
 }

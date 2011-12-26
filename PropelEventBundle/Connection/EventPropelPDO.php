@@ -4,6 +4,11 @@ namespace Glorpen\PropelEvent\PropelEventBundle\Connection;
 use Glorpen\PropelEvent\PropelEventBundle\Events as PropelEvents;
 use \PropelPDO;
 
+/**
+ * Connection class with transaction events.
+ * Can trigger connection.commit and connection.rollback events.
+ * @author Arkadiusz Dzięgiel
+ */
 class EventPropelPDO extends PropelPDO {
 	
 	public function commit(){
