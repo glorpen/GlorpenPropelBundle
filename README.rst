@@ -32,3 +32,11 @@ How to install
        }
     }
 
+- add behavior to propel config
+::
+
+     propel:
+        build_properties:
+          propel.behavior.event.class: 'src.Glorpen.PropelEvent.PropelEventBundle.behavior.EventBehavior'
+          propel.behavior.default: "event"
+
