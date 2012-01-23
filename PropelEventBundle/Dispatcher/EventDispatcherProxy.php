@@ -50,7 +50,9 @@ class EventDispatcherProxy {
 	 */
 	static public function trigger($name, Event $data){
 		if(self::$dispatcher) {
-			call_user_func_array(self::$dispatcher, self::$dispatcher_args)->dispatch($name, $data);
+			if(!is_array($name)) $name=array($name);
+			foreach($name as $n)
+				call_user_func_array(self::$dispatcher, self::$dispatcher_args)->dispatch($n, $data);
 		}
 	}
 }

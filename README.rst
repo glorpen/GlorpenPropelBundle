@@ -40,3 +40,14 @@ How to install
           propel.behavior.event.class: 'src.Glorpen.PropelEvent.PropelEventBundle.behavior.EventBehavior'
           propel.behavior.default: "event"
 
+- register listener
+::
+	
+	<service class="SomeBundle\Listeners\HistoryBehaviorListener">
+		<argument type="service" id="security.context" />
+		<tag name="propel.event" />
+	</service>
+	
+	<service id="my.listener" class="SomeBundle\Listeners\HistoryBehaviorListener">
+		<tag name="propel.event" method="onPropelEventSave" event="model.save.post" />
+	</service>
