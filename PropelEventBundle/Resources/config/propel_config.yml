@@ -1,0 +1,3 @@
+propel:
+  build_properties:
+    propel.behavior.event.class: 'src.Glorpen.PropelEvent.PropelEventBundle.behavior.EventBehavior'
