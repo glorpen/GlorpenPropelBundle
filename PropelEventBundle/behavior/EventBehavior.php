@@ -84,7 +84,7 @@ EOF;
 	
 	public function objectFilter(&$script){
 		$rep = <<<EOF
-	EventDispatcherProxy::trigger(array('construct.after','model.construct.after'), new ModelEvent(\$this));
+	EventDispatcherProxy::trigger(array('construct','model.construct'), new ModelEvent(\$this));
 	
 EOF;
 		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script);
@@ -93,10 +93,19 @@ EOF;
 	public function queryFilter(&$script)
 	{
 		$rep = <<<EOF
-	EventDispatcherProxy::trigger(array('construct.after','query.construct.after'), new QueryEvent(\$this));
+	EventDispatcherProxy::trigger(array('construct','query.construct'), new QueryEvent(\$this));
 	
 EOF;
 		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script);
+	}
+	
+	public function peerFilter(&$script){
+		$peerClass = $this->getTable()->getNamespace().'\\om\\Base'.$this->getTable()->getPhpName().'Peer';
+		
+		$script .= <<<EOF
+EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('{$peerClass}'));
+
+EOF;
 	}
 	
 	public function objectMethods($builder)
@@ -110,4 +119,10 @@ EOF;
 		$builder->declareClass('Glorpen\\PropelEvent\\PropelEventBundle\\Events\\QueryEvent');
 		$builder->declareClass('Glorpen\\PropelEvent\\PropelEventBundle\\Dispatcher\\EventDispatcherProxy');
 	}
+	
+	public function staticMethods($builder){
+		$builder->declareClass('Glorpen\\PropelEvent\\PropelEventBundle\\Events\\PeerEvent');
+		$builder->declareClass('Glorpen\\PropelEvent\\PropelEventBundle\\Dispatcher\\EventDispatcherProxy');
+	}
+	
 }
