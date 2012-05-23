@@ -4,6 +4,16 @@ PropelEventBundle
 
 Propel events in Symfony2.
 
+Using with Symfony2 2.1
+-----------------------
+
+To use this bundle with version 2.1 you have to override parameter dispatcher.class with:
+
+::
+
+    <parameter key="glorpen.propel.event.dispatcher.class">Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher</parameter>
+    
+
 
 How to install
 --------------
