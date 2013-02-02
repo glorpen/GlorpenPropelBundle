@@ -20,8 +20,12 @@
 namespace Glorpen\Propel\PropelBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+
 use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+
 use Glorpen\Propel\PropelBundle\DependencyInjection\Compiler\PropelEventPass;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @author Arkadiusz Dzięgiel
@@ -31,8 +35,6 @@ class GlorpenPropelBundle extends Bundle
 	
 	public function build(ContainerBuilder $container)
 	{
-		parent::build($container);
-	
 		$container->addCompilerPass(new PropelEventPass());
 	}
 	

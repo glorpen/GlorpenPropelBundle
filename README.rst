@@ -4,6 +4,13 @@ GlorpenPropelBundle
 
 Additional integration Propel with Symfony2.
 
+TODO
+----
+
+- Importing config.yml & config_dev.yml to main configuration
+- rollback and commit events
+
+
 How to install
 --------------
 

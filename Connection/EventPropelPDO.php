@@ -1,6 +1,7 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Connection;
 
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
 use Glorpen\Propel\PropelBundle\Events as PropelEvents;
 use \PropelPDO;
 

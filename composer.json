@@ -1,0 +1,22 @@
+{
+    "name": "glorpen/propel-bundle",
+    "description": "Propel events for Symfony2 and more.",
+    "minimum-stability": "dev",
+    "type": "symfony-bundle",
+    "license": "GPL-3.0",
+    "require": {
+        "symfony/symfony": "2.1.*",
+        "propel/propel-bundle": "1.*"
+    },
+    "authors": [
+        {
+            "name": "Arkadiusz Dzięgiel"
+        }
+    ],
+    "target-dir": "Glorpen/Propel/PropelEvent",
+    "autoload": {
+        "psr-0": {
+            "Glorpen\\Propel\\PropelEvent": ""
+        }
+    }
+}

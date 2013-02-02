@@ -1,0 +1,3 @@
+propel:
+  dbal:
+    classname: Glorpen\Propel\PropelBundle\Connection\EventDebugPDO

@@ -1,3 +1,6 @@
 propel:
   build_properties:
-    propel.behavior.event.class: 'src.Glorpen.Propel.PropelBundle.Behavior.EventBehavior'
+    propel.behavior.event.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.EventBehavior'
+    propel.behavior.default: "event"
+  dbal:
+    classname: Glorpen\Propel\PropelBundle\Connection\EventPropelPDO
