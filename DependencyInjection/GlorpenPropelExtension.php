@@ -24,6 +24,13 @@ class GlorpenPropelExtension extends Extension
     	
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+        
+        $this->setupOverrider($config, $container);
+    }
+    
+    public function setupOverrider(array $config, ContainerBuilder $container){
+    	$container->getDefinition("glorpen.propel.om_overrider")
+    		->addArgument($config['extended_models']);
     }
     
     public function getAlias(){

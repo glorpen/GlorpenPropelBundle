@@ -6,11 +6,15 @@
 
     <parameters>
         <parameter key="glorpen.propel.event.dispatcher.class">Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher</parameter>
+        <parameter key="glorpen.propel.om_overrider.class">Glorpen\Propel\PropelBundle\Services\OMClassOverrider</parameter>
     </parameters>
 
     <services>
 		<service id="glorpen.propel.event.dispatcher" class="%glorpen.propel.event.dispatcher.class%">
             <argument type="service" id="service_container" />
+        </service>
+        <service id="glorpen.propel.om_overrider" class="%glorpen.propel.om_overrider.class%">
+        	<tag name="propel.event" method="onDetectionRequest" event="om.detect" />
         </service>
     </services>
 </container>

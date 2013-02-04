@@ -16,7 +16,7 @@ class EventPropelPDO extends PropelPDO {
 		$opcount = $this->getNestedTransactionCount();
 		$return = parent::commit();
 		
-		if($return && $opcount === 1) EventDispatcherProxy::trigger(new PropelEvents\ConnectionEvent($this), 'connection.commit');
+		if($return && $opcount === 1) EventDispatcherProxy::trigger('connection.commit', new PropelEvents\ConnectionEvent($this));
 		
 		return $return;
 	}
@@ -25,7 +25,7 @@ class EventPropelPDO extends PropelPDO {
 		$opcount = $this->getNestedTransactionCount();
 		$return = parent::rollBack();
 	
-		if($return && $opcount === 1) EventDispatcherProxy::trigger(new PropelEvents\ConnectionEvent($this), 'connection.rollback');
+		if($return && $opcount === 1) EventDispatcherProxy::trigger('connection.rollback', new PropelEvents\ConnectionEvent($this));
 	
 		return $return;
 	}
