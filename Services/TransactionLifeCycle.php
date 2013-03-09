@@ -15,7 +15,7 @@ class TransactionLifeCycle implements EventSubscriberInterface {
 	
 	static protected $events = array('save','update','insert','delete');
 	
-	protected $models = array();
+	protected $models = array(), $processedModels=array();
 	
 	public function onModelEvent($eventType, ModelEvent $event){
 		$this->models[] = array($event->getModel(), $eventType);
@@ -27,35 +27,31 @@ class TransactionLifeCycle implements EventSubscriberInterface {
 		}
 	}
 	
-	protected function applyTransactionState($type, \PropelPDO $con = null){
-		var_dump($this->models);
-		foreach($this->getModels() as $m){
+	protected function applyTransactionState($type, $models, \PropelPDO $con = null){
+		foreach($models as $m){
 			list($model, $eventType) = $m;
 			$model->{'pre'.ucfirst($type).ucfirst($eventType)}($con);
 			$model->{'pre'.ucfirst($type)}($con);
+			if($type=='commit') $this->processedModels[] = $m;
 		}
 	}
 	
 	public function onCommit(ConnectionEvent $event){
-		$this->applyTransactionState('commit', $event->getConnection());
-	}
-	
-	/*
-	public function onRollback(ConnectionEvent $event){
-		$this->applyTransactionState('rollback');
-	}
-	*/
-	
-	protected function getModels(){
 		$models = $this->models;
 		$this->models = array();
-		return $models;
+		$this->applyTransactionState('commit', $models, $event->getConnection());
+	}
+	
+	public function onRollback(ConnectionEvent $event){
+		$models = $this->processedModels;
+		$this->processedModels = array();
+		$this->applyTransactionState('rollback', $models, $event->getConnection());
 	}
 	
 	public static function getSubscribedEvents(){
 		$ret=array(
-			'connection.commit' => 'onCommit',
-			//'connection.rollback' => 'onRollback',
+			'connection.commit.pre' => 'onCommit',
+			'connection.rollback.pre' => 'onRollback',
 		);
 		foreach(self::$events as $e){
 			$ret['model.'.$e.'.post'] = 'onModel'.ucfirst($e);

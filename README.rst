@@ -100,13 +100,18 @@ Transaction events
 
 Just like with Doctrine *@ORM\HasLifecycleCallbacks* you can handle non db logic in model in db transaction.
 
-Hooks will be run just before PDO transaction commit. Methods provided by **EventBehavior** are:
+Commit hooks will be run just before PDO transaction commit and rollback just before rolback and only on saved models (if exception was thrown in preCommit hook). Methods provided by **EventBehavior** are:
 
 - preCommit
 - preCommitSave
 - preCommitUpdate
 - preCommitInsert
 - preCommitDelete
+- preRollback
+- preRollbackSave
+- preRollbackUpdate
+- preRollbackInsert
+- preRollbackDelete
 
 And example how you can use available hooks (code mostly borrowed from Symfony2 cookbook):
 
