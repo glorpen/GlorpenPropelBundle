@@ -35,7 +35,7 @@ How to install
 
 *app/AppKernel.php*
 
-.. sourcecode :: php
+.. sourcecode:: php
 
     <?php
     
@@ -62,7 +62,7 @@ Listening for propel hooks
 
 - register listener
 
-.. code-block:: xml
+.. sourcecode:: xml
 
 	<service class="SomeBundle\Listeners\HistoryBehaviorListener">
 		<argument type="service" id="security.context" />
@@ -78,7 +78,7 @@ ContainerAwareInterface for model
 
 You can implement **ContainerAwareInterface** on your model to get access to *Container* through built-in service. Container is injected in *model.construct* event.
 
-.. code-block:: php
+.. sourcecode:: php
 
    <?php
    
@@ -115,7 +115,7 @@ Commit hooks will be run just before PDO transaction commit and rollback just be
 
 And example how you can use available hooks (code mostly borrowed from Symfony2 cookbook):
 
-.. code-block:: php
+.. sourcecode:: php
 
    <?php
    class SomeModel extends BaseSomeModel {
@@ -169,7 +169,7 @@ You can trigger events with generic or custom Event class, in following example 
 
 - create **ValidationEvent** event
 
-.. code-block:: php
+.. sourcecode:: php
 
    <?php
    
@@ -194,7 +194,7 @@ You can trigger events with generic or custom Event class, in following example 
 
 - register listener in **services.xml**
 
-.. code-block:: xml
+.. sourcecode:: xml
 
    <service id="your.service" class="%your.service.class%">
       <argument>%your.service.argument%</argument>
@@ -203,7 +203,7 @@ You can trigger events with generic or custom Event class, in following example 
 
 - and then use it within model class
 
-.. code-block:: php
+.. sourcecode:: php
 
    <?php
    
