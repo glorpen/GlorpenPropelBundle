@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="glorpen.propel.event.dispatcher.class">Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher</parameter>
         <parameter key="glorpen.propel.om_overrider.class">Glorpen\Propel\PropelBundle\Services\OMClassOverrider</parameter>
+        <parameter key="glorpen.propel.container_aware.class">Glorpen\Propel\PropelBundle\Services\ContainerAwareModel</parameter>
+        <parameter key="glorpen.propel.transaction_aware.class">Glorpen\Propel\PropelBundle\Services\TransactionLifeCycle</parameter>
     </parameters>
 
     <services>
@@ -15,6 +17,13 @@
         </service>
         <service id="glorpen.propel.om_overrider" class="%glorpen.propel.om_overrider.class%">
         	<tag name="propel.event" method="onDetectionRequest" event="om.detect" />
+        </service>
+        <service id="glorpen.propel.container_aware" class="%glorpen.propel.container_aware.class%">
+        	<argument type="service" id="service_container" />
+        	<tag name="propel.event" method="onModelConstruct" event="model.construct" />
+        </service>
+        <service id="glorpen.propel.transaction_aware" class="%glorpen.propel.transaction_aware.class%">
+        	<tag name="propel.event" />
         </service>
     </services>
 </container>

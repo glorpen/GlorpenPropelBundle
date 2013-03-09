@@ -14,15 +14,28 @@ TODO
 How to install
 --------------
 
-- add this plugin to your project. From your project root:
+- add requirements to composer.json:
 
-    hg clone https://bitbucket.org/glorpen/glorpenpropeleventbundle Glorpen/PropelEvent
+.. code-block:: json
+
+   {
+       "require": {
+           "glorpen/propel-bundle": "@dev"
+       },
+       "repositories": [
+           {
+               "type": "hg",
+               "url": "https://bitbucket.org/glorpen/glorpenpropelbundle"
+           }
+        ]
+   }
+   
 
 - enable the plugin in your **AppKernel** class
 
 *app/AppKernel.php*
 
-::
+.. code-block:: php
 
     <?php
     
@@ -32,22 +45,16 @@ How to install
        {
            $bundles = array(
                ...
-               new Glorpen\Propel\PropelBundle\\PropelEventBundle(),
+               new Glorpen\Propel\PropelBundle\\PropelBundle(),
                ...
            );
        }
     }
 
-- add behavior to propel config (only if you want use events on propel post/pre hooks)
 
-or you can import PropelEventBundle/Resources/config/config.yml for class definition
+- add behavior configuration to propel config
 
-::
-
-     propel:
-        build_properties:
-          propel.behavior.event.class: 'src.Glorpen.PropelEvent.PropelEventBundle.behavior.EventBehavior'
-          propel.behavior.default: "event"
+You can do it by hand or by importing *PropelBundle/Resources/config/config.yml* and *config_dev.yml* accordingly.
 
 
 Listening for propel hooks
@@ -55,7 +62,7 @@ Listening for propel hooks
 
 - register listener
 
-::
+.. code-block:: xml
 
 	<service class="SomeBundle\Listeners\HistoryBehaviorListener">
 		<argument type="service" id="security.context" />
@@ -66,6 +73,89 @@ Listening for propel hooks
 		<tag name="propel.event" method="onPropelEventSave" event="model.save.post" />
 	</service>
 
+ContainerAwareInterface for model
+---------------------------------
+
+You can implement **ContainerAwareInterface** on your model to get access to *Container* through built-in service. Container is injected in *model.construct* event.
+
+.. code-block:: php
+
+   <?php
+   
+   use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+   use Symfony\Component\DependencyInjection\ContainerInterface;
+   
+   class Something extends BaseSomething implements ContainerAwareInterface
+   {
+      private $someService;
+      
+      public function setContainer(ContainerInterface $container = null){
+         if($container) $this->someService = $this->container->get("some_service");
+      }  
+   }
+
+
+Transaction events
+------------------
+
+Just like with Doctrine *@ORM\HasLifecycleCallbacks* you can handle non db logic in model in db transaction.
+
+Hooks will be run just before PDO transaction commit. Methods provided by **EventBehavior** are:
+
+- preCommit
+- preCommitSave
+- preCommitUpdate
+- preCommitInsert
+- preCommitDelete
+
+And example how you can use available hooks (code mostly borrowed from Symfony2 cookbook):
+
+.. code-block:: php
+
+   <?php
+   class SomeModel extends BaseSomeModel {
+      public function preCommitSave(\PropelPDO $con = null){
+         $this->upload();
+      }
+      public function preCommitDelete(\PropelPDO $con = null){
+         $this->removeUpload();
+      }
+      
+      public function preSave(\PropelPDO $con = null){
+         $this->preUpload();
+         return parent::preSave($con);
+      }
+      
+      // code below is copied from http://symfony.com/doc/2.1/cookbook/doctrine/file_uploads.html
+      
+      public $file;
+      
+      public function preUpload(){
+         if (null !== $this->file){
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->path = $filename.'.'.$this->file->guessExtension();
+         }
+      }
+      
+      public function upload(){
+         if (null === $this->path) return;
+      
+         // if there is an error when moving the file, an exception will
+         // be automatically thrown by move(). This will properly prevent
+         // the entity from being persisted to the database on error
+         $this->file->move($this->getUploadRootDir(), $this->path);
+         throw new \RuntimeException("file cannot be saved");
+      
+         unset($this->path);
+      }
+      
+      public function removeUpload(){
+         if ($file = $this->getAbsolutePath()){
+            unlink($file);
+         }
+      }
+   }
 
 Custom events
 -------------
@@ -74,8 +164,8 @@ You can trigger events with generic or custom Event class, in following example 
 
 - create **ValidationEvent** event
 
-::
-   
+.. code-block:: php
+
    <?php
    
    namespace YourBundle\Events;
@@ -99,7 +189,7 @@ You can trigger events with generic or custom Event class, in following example 
 
 - register listener in **services.xml**
 
-::
+.. code-block:: xml
 
    <service id="your.service" class="%your.service.class%">
       <argument>%your.service.argument%</argument>
@@ -108,7 +198,7 @@ You can trigger events with generic or custom Event class, in following example 
 
 - and then use it within model class
 
-::
+.. code-block:: php
 
    <?php
    

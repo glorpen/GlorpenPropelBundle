@@ -112,6 +112,14 @@ EOF;
 	{
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Events\\ModelEvent');
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Dispatcher\\EventDispatcherProxy');
+		
+		return <<<EOF
+public function preCommit(\\PropelPDO \$con = null){}
+public function preCommitSave(\\PropelPDO \$con = null){}
+public function preCommitDelete(\\PropelPDO \$con = null){}
+public function preCommitUpdate(\\PropelPDO \$con = null){}
+public function preCommitInsert(\\PropelPDO \$con = null){}
+EOF;
 	}
 	
 	public function queryMethods($builder)
