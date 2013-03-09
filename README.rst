@@ -4,15 +4,8 @@ GlorpenPropelBundle
 
 Additional integration Propel with Symfony2.
 
-TODO
-----
-
-- Importing config.yml & config_dev.yml to main configuration
-- rollback and commit events
-
-
 How to install
---------------
+==============
 
 - add requirements to composer.json:
 
@@ -54,7 +47,32 @@ How to install
 
 - add behavior configuration to propel config
 
-You can do it by hand or by importing *PropelBundle/Resources/config/config.yml* and *config_dev.yml* accordingly.
+To enable all behaviors at once you can import to your configuration *PropelBundle/Resources/config/config.yml* and *config_dev.yml* accordingly.
+
+
+Propel Events
+=============
+
+If you didn't import *config.yml* providen by this bundle, you have to add *event* behavior to your propel configuration and change *PropelPDO* class.
+
+
+.. sourcecode:: yaml
+
+   propel:
+     build_properties:
+       propel.behavior.event.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.EventBehavior'
+       propel.behavior.default: "event"
+     dbal:
+       classname: Glorpen\Propel\PropelBundle\Connection\EventPropelPDO
+ 
+
+And in *config_dev.yml*:
+
+.. sourcecode:: yaml
+
+   propel:
+     dbal:
+       classname: Glorpen\Propel\PropelBundle\Connection\EventPropelDebugPDO
 
 
 Listening for propel hooks
@@ -219,3 +237,36 @@ You can trigger events with generic or custom Event class, in following example 
          EventDispatcherProxy::trigger('product.validation', new ValidationEvent($metadata));
       }
    }
+
+
+Model Extending
+===============
+
+If you didn't import *config.yml* providen by this bundle, you have to add *extend* behavior to your propel configuration.
+
+.. sourcecode:: yaml
+
+   propel:
+     build_properties:
+       propel.behavior.extend.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.ExtendBehavior'
+       propel.behavior.default: "extend"
+
+Usage
+-----
+
+With behavior enabled you can define custom model classes for use with Propel. In *config.yml*:
+
+.. sourcecode:: yaml
+
+   glorpen_propel:
+     extended_models:
+       FOS\UserBundle\Propel\User: MyApp\MyBundle\Propel\User
+
+You can extend only Model classes this way (extending Peers/Queries shouldn't be needed).
+
+Calls to Query::find(), Peer::populateObject() etc. will now return your extended class objects.
+
+FOSUserBundle and AdminGenerator
+--------------------------------
+
+With above config, you can generate backend with **AdminGenerator** for **FOSUser** edit/creation/etc. For now you have to create empty UserQuery and UserPeer classes and then whole backend for user model should work :)
