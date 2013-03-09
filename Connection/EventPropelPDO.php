@@ -17,7 +17,7 @@ class EventPropelPDO extends PropelPDO {
 		if($opcount === 1) EventDispatcherProxy::trigger('connection.commit.pre', new PropelEvents\ConnectionEvent($this));
 		$return = parent::commit();
 		if($return && $opcount === 1) EventDispatcherProxy::trigger('connection.commit.post', new PropelEvents\ConnectionEvent($this));
-		var_dump($return);
+		
 		return $return;
 	}
 	
