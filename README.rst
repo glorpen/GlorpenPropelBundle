@@ -16,7 +16,7 @@ How to install
 
 - add requirements to composer.json:
 
-.. code-block:: json
+.. sourcecode:: json
 
    {
        "require": {
@@ -35,7 +35,7 @@ How to install
 
 *app/AppKernel.php*
 
-.. code-block:: php
+.. sourcecode :: php
 
     <?php
     
