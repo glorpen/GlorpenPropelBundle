@@ -22,6 +22,14 @@ EOF;
 			$script
 		);
 		
+		//until https://github.com/propelorm/Propel/pull/592 is not merged into propel
+		$script = preg_replace('/(public static function populateObject.*?cls = .*?Peer::)OM_CLASS/s', '\1getOMClass(\$row, \$startcol)', $script);
+		
+	}
+	
+	public function queryFilter(&$script){
+		//until https://github.com/propelorm/Propel/pull/592 is not merged into propel
+		$script = preg_replace('/(protected function findPkSimple\(\$key, \$con\).*?)\$obj = new ([^(]+)[\(\)]{2}/s','$1\$cls = $2Peer::getOMClass();'."\n\t\t\t".'\$obj = new \$cls', $script);
 	}
 	
 	public function staticMethods($builder){
