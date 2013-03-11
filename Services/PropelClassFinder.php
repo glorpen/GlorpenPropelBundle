@@ -32,7 +32,7 @@ class PropelClassFinder {
 			}
 		}
 		
-		throw new \LogicException('Can\'t find query class '.$queryClass);
+		throw new \LogicException('Can\'t find query class for '.$modelClass);
 	}
 	
 	public function findPeerClass($modelClass){
