@@ -6,24 +6,26 @@
 
     <parameters>
         <parameter key="glorpen.propel.event.dispatcher.class">Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher</parameter>
-        <parameter key="glorpen.propel.om_overrider.class">Glorpen\Propel\PropelBundle\Services\OMClassOverrider</parameter>
-        <parameter key="glorpen.propel.container_aware.class">Glorpen\Propel\PropelBundle\Services\ContainerAwareModel</parameter>
-        <parameter key="glorpen.propel.transaction_aware.class">Glorpen\Propel\PropelBundle\Services\TransactionLifeCycle</parameter>
+        <parameter key="glorpen.propel.listeners.om_overrider.class">Glorpen\Propel\PropelBundle\Services\OMClassOverrider</parameter>
+        <parameter key="glorpen.propel.listeners.container_aware.class">Glorpen\Propel\PropelBundle\Services\ContainerAwareModel</parameter>
+        <parameter key="glorpen.propel.listeners.transaction_aware.class">Glorpen\Propel\PropelBundle\Services\TransactionLifeCycle</parameter>
+        <parameter key="glorpen.propel.class_finder.class">Glorpen\Propel\PropelBundle\Services\PropelClassFinder</parameter>
     </parameters>
 
     <services>
 		<service id="glorpen.propel.event.dispatcher" class="%glorpen.propel.event.dispatcher.class%">
             <argument type="service" id="service_container" />
         </service>
-        <service id="glorpen.propel.om_overrider" class="%glorpen.propel.om_overrider.class%">
+        <service id="glorpen.propel.listeners.om_overrider" class="%glorpen.propel.listeners.om_overrider.class%">
         	<tag name="propel.event" method="onDetectionRequest" event="om.detect" />
         </service>
-        <service id="glorpen.propel.container_aware" class="%glorpen.propel.container_aware.class%">
+        <service id="glorpen.propel.listeners.container_aware" class="%glorpen.propel.listeners.container_aware.class%">
         	<argument type="service" id="service_container" />
         	<tag name="propel.event" method="onModelConstruct" event="model.construct" />
         </service>
-        <service id="glorpen.propel.transaction_aware" class="%glorpen.propel.transaction_aware.class%">
+        <service id="glorpen.propel.listeners.transaction_aware" class="%glorpen.propel.listeners.transaction_aware.class%">
         	<tag name="propel.event" />
         </service>
+        <service id="glorpen.propel.class_finder" class="%glorpen.propel.class_finder.class%" />
     </services>
 </container>

@@ -29,7 +29,7 @@ class GlorpenPropelExtension extends Extension
     }
     
     public function setupOverrider(array $config, ContainerBuilder $container){
-    	$container->getDefinition("glorpen.propel.om_overrider")
+    	$container->getDefinition("glorpen.propel.listeners.om_overrider")
     		->addArgument($config['extended_models']);
     }
     
