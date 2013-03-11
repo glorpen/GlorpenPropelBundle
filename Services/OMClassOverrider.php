@@ -22,6 +22,11 @@ class OMClassOverrider {
 		}
 	}
 	
+	public function getExtendedClass($class){
+		$ret = array_search($class, $this->classes);
+		return $ret?$ret:null;
+	}
+	
 	public function onDetectionRequest(DetectOMClassEvent $e){
 		if(!$e->isDetected()){
 			$e->setDetectedClass($this->getClassForOM($e->getClass()));
