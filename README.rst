@@ -14,13 +14,7 @@ How to install
    {
        "require": {
            "glorpen/propel-bundle": "@dev"
-       },
-       "repositories": [
-           {
-               "type": "hg",
-               "url": "https://bitbucket.org/glorpen/glorpenpropelbundle"
-           }
-        ]
+       }
    }
    
 
@@ -38,7 +32,7 @@ How to install
        {
            $bundles = array(
                ...
-               new Glorpen\Propel\PropelBundle\\PropelBundle(),
+               new Glorpen\Propel\PropelBundle\PropelBundle(),
                ...
            );
        }
