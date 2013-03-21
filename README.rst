@@ -32,7 +32,7 @@ How to install
        {
            $bundles = array(
                ...
-               new Glorpen\Propel\PropelBundle\PropelBundle(),
+               new Glorpen\Propel\PropelBundle\GlorpenPropelBundle(),
                ...
            );
        }
@@ -90,6 +90,8 @@ ContainerAwareInterface for model
 
 You can implement **ContainerAwareInterface** on your model to get access to *Container* through built-in service. Container is injected in *model.construct* event.
 
+If you find yourself with error like `Serialization of 'Closure' is not allowed` it is probably about some not serializable services injected in model (since propel occasionally serializes and unserializes data).
+
 .. sourcecode:: php
 
    <?php
@@ -124,6 +126,8 @@ Commit hooks will be run just before PDO transaction commit and rollback just be
 - preRollbackUpdate
 - preRollbackInsert
 - preRollbackDelete
+
+Be aware that when using transaction on big amount of model objects with on-demand formatter they still will be cached inside service so you can exhaust available php memory. 
 
 And example how you can use available hooks (code mostly borrowed from Symfony2 cookbook):
 
@@ -259,6 +263,13 @@ With behavior enabled you can define custom model classes for use with Propel. I
 You can extend only Model classes this way (extending Peers/Queries shouldn't be needed).
 
 Calls to Query::find(), Peer::populateObject() etc. will now return your extended class objects.
+
+In short it fixes:
+
+-  extending Model classes used by other bundles (eg. FOSUserBundle)
+-  queries/peer's returning proper isntances
+-  creating proper Query instance when calling `SomeQuery::create()` 
+
 
 FOSUserBundle and AdminGenerator
 --------------------------------
