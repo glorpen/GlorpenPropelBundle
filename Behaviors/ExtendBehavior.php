@@ -38,4 +38,19 @@ EOF;
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Events\DetectOMClassEvent');
 	}
 	
+	public function queryMethods($builder){
+		
+		//fix on-demand-formatter
+		return <<<EOF
+public function setFormatter(\$formatter)
+{
+	if (is_string(\$formatter) && \$formatter === \\ModelCriteria::FORMAT_ON_DEMAND) {
+		\$formatter = '\Glorpen\Propel\PropelBundle\Formatter\PropelOnDemandFormatter';
+	}
+			
+	return parent::setFormatter(\$formatter);
+}
+EOF;
+	}
+	
 }
