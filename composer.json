@@ -1,7 +1,6 @@
 {
     "name": "glorpen/propel-bundle",
     "description": "Propel events and model extending for Symfony2.",
-    "minimum-stability": "dev",
     "type": "symfony-bundle",
     "license": "GPL-3.0",
     "require": {
