@@ -30,4 +30,9 @@ class EventPropelPDO extends PropelPDO {
 		return $return;
 	}
 	
+	public function __construct($dsn, $username = null, $password = null, $driver_options = array()){
+		parent::__construct($dsn, $username, $password, $driver_options);
+		EventDispatcherProxy::trigger('connection.create', new PropelEvents\ConnectionEvent($this));
+	}
+	
 }

@@ -66,7 +66,7 @@ And in *config_dev.yml*:
 
    propel:
      dbal:
-       classname: Glorpen\Propel\PropelBundle\Connection\EventPropelDebugPDO
+       classname: Glorpen\Propel\PropelBundle\Connection\EventDebugPDO
 
 
 Listening for propel hooks
@@ -84,6 +84,51 @@ Listening for propel hooks
 	<service id="my.listener" class="SomeBundle\Listeners\HistoryBehaviorListener">
 		<tag name="propel.event" method="onPropelEventSave" event="model.save.post" />
 	</service>
+
+Available events
+----------------
+
+- connection.create
+- connection.commit.pre
+- connection.commit.post
+- connection.rollback.post
+- connection.rollback.pre
+
+Event class: `ConnectionEvent`
+
+- model.insert.post
+- model.update.post
+- model.delete.post
+- model.save.post
+- model.insert.pre
+- model.update.pre
+- model.delete.pre
+- model.save.pre
+- model.construct
+
+Event class: `ModelEvent`
+
+- query.delete.pre
+- query.delete.post
+- query.select.pre
+- query.select.post
+- query.update.pre
+- query.update.post
+- query.construct
+
+Event class: `QueryEvent`
+
+- peer.construct
+
+Event class: `PeerEvent`
+
+- update.post
+- delete.post
+- update.pre
+- delete.pre
+- construct
+
+Will be called on model/query/peer construct/delete/update/etc
 
 ContainerAwareInterface for model
 ---------------------------------
@@ -107,7 +152,6 @@ If you find yourself with error like `Serialization of 'Closure' is not allowed`
          if($container) $this->someService = $this->container->get("some_service");
       }  
    }
-
 
 Transaction events
 ------------------
