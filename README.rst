@@ -319,3 +319,30 @@ FOSUserBundle and AdminGenerator
 --------------------------------
 
 With above config, you can generate backend with **AdminGenerator** for **FOSUser** edit/creation/etc. For now you have to create empty UserQuery and UserPeer classes and then whole backend for user model should work :)
+
+
+Other goodies
+=============
+
+SimpleModelJoin
+---------------
+
+Allows to inject data into `ON` clause for eg. comparing field to date or field from other joined table.
+
+*Remember that provided values are added as-is, without parsing for aliases and escaping.*
+
+Usage:
+
+.. sourcecode:: php
+
+      <?php
+      $relationAlias = 'WithoutCurrentSubscription';
+      
+      $join = PlainModelJoin::create($this, 'Subscription', $relationAlias, \Criteria::LEFT_JOIN);
+      
+      //active items...
+      $join->addCondition($relationAlias.'.starts_at', '"'.$now->format('Y-m-d H:i:s').'"', \Criteria::LESS_EQUAL);
+      $join->addCondition($relationAlias.'.ends_at', '"'.$now->format('Y-m-d H:i:s').'"', \Criteria::GREATER_EQUAL);
+      
+      //...and inversion
+      $this->where('WithoutCurrentSubscription.Id is null');
