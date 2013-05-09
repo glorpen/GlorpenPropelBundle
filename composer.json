@@ -4,8 +4,11 @@
     "type": "symfony-bundle",
     "license": "GPL-3.0",
     "require": {
-        "symfony/symfony": "2.2.*",
+        "symfony/symfony": "<2.4",
         "propel/propel-bundle": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
     },
     "authors": [
         {

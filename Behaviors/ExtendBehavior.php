@@ -23,7 +23,7 @@ EOF;
 		);
 		
 		//until https://github.com/propelorm/Propel/pull/592 is not merged into propel
-		$script = preg_replace('/(public static function populateObject.*?cls = .*?Peer::)OM_CLASS/s', '\1getOMClass(\$row, \$startcol)', $script);
+		$script = preg_replace('/(public static function populateObject.*?\$cls = [^:]+::)OM_CLASS/s', '\1getOMClass(\$row, \$startcol)', $script);
 		
 	}
 	

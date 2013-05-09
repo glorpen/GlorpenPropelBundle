@@ -88,13 +88,15 @@ Listening for propel hooks
 Available events
 ----------------
 
+Event class: `ConnectionEvent`
+
 - connection.create
 - connection.commit.pre
 - connection.commit.post
 - connection.rollback.post
 - connection.rollback.pre
 
-Event class: `ConnectionEvent`
+Event class: `ModelEvent`
 
 - model.insert.post
 - model.update.post
@@ -106,26 +108,17 @@ Event class: `ConnectionEvent`
 - model.save.pre
 - model.construct
 
-Event class: `ModelEvent`
+Event class: `QueryEvent`
 
 - query.delete.pre
 - query.delete.post
 - query.select.pre
-- query.select.post
 - query.update.pre
 - query.update.post
 - query.construct
 
-Event class: `QueryEvent`
-
-- peer.construct
-
 Event class: `PeerEvent`
 
-- update.post
-- delete.post
-- update.pre
-- delete.pre
 - construct
 
 Will be called on model/query/peer construct/delete/update/etc

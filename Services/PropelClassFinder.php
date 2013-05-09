@@ -43,9 +43,4 @@ class PropelClassFinder {
 		return $peerClass::getOMClass();
 	}
 	
-	// in case when getOMClass is changed
-	public function findRealModelClass($modelClass){
-		return $this->findModelClass($this->findPeerClass($modelClass));
-	}
-	
 }

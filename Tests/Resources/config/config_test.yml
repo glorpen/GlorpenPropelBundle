@@ -1,0 +1,8 @@
+imports:
+    - { resource: "@GlorpenPropelBundle/Resources/config/config.yml" }
+
+framework:
+    secret:          "test secret"
+    test: ~
+    session:
+        storage_id: session.storage.mock_file

@@ -2,4 +2,9 @@ syntax: regexp
 ^\.settings$
 ^TODO$
 ^\.project$
+^vendor$
 ^\.buildpath$
+^Tests/cache$
+^Tests/logs$
+^composer\.lock$
+^composer\.phar$

@@ -63,12 +63,6 @@ EventDispatcherProxy::trigger('query.select.pre', new QueryEvent(\$this));
 EOF;
 	}
 	
-	public function postSelectQuery(){
-		return <<<EOF
-EventDispatcherProxy::trigger('query.select.post', new QueryEvent(\$this));
-EOF;
-	}
-
 	public function preUpdateQuery(){
 		return <<<EOF
 EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent(\$this));
@@ -87,7 +81,17 @@ EOF;
 	EventDispatcherProxy::trigger(array('construct','model.construct'), new ModelEvent(\$this));
 	
 EOF;
-		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script);
+		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script, 1, $count);
+		if($count == 0){
+			$construct = <<<EOF
+public function __construct(){
+		parent::__construct();
+	{$rep}}
+
+	
+EOF;
+			$script = preg_replace('#(public function .*?}.*?)(/\*\*)#s', '\1'.$construct.'\2', $script, 1);
+		}
 	}
 	
 	public function queryFilter(&$script)
