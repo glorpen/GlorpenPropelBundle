@@ -4,6 +4,19 @@ GlorpenPropelBundle
 
 Additional integration Propel with Symfony2.
 
+
+Official repositories
+=====================
+
+For forking and other funnies
+
+
+BitBucket: https://bitbucket.org/glorpen/glorpenpropelbundle - main repo
+
+
+GitHub: https://github.com/glorpen/GlorpenPropelBundle
+
+
 How to install
 ==============
 
