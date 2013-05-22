@@ -330,8 +330,8 @@ With above config, you can generate backend with **AdminGenerator** for **FOSUse
 Other goodies
 =============
 
-SimpleModelJoin
----------------
+PlainModelJoin
+--------------
 
 Allows to inject data into `ON` clause for eg. comparing field to date or field from other joined table.
 
