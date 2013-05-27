@@ -54,7 +54,7 @@ How to install
 
 - add behavior configuration to propel config
 
-To enable all behaviors at once you can import to your configuration *PropelBundle/Resources/config/config.yml* and *config_dev.yml* accordingly.
+To enable all behaviors at once you can import to your configuration *GlorpenPropelBundle/Resources/config/config.yml* and *config_dev.yml* accordingly.
 
 
 Propel Events
