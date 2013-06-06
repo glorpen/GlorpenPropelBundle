@@ -29,7 +29,7 @@ EOF;
 	
 	public function queryFilter(&$script){
 		//until https://github.com/propelorm/Propel/pull/592 is not merged into propel
-		$script = preg_replace('/(protected function findPkSimple\(\$key, \$con\).*?)\$obj = new ([^(]+)[\(\)]{2}/s','$1\$cls = $2Peer::getOMClass();'."\n\t\t\t".'\$obj = new \$cls', $script);
+		$script = preg_replace('/(protected function findPkSimple\(\$key, \$con\).*?)\$obj = new ([^$][^(]+)[\(\)]{2}/s','$1\$cls = $2Peer::getOMClass();'."\n\t\t\t".'\$obj = new \$cls', $script);
 		//return correct isntance in query::create
 		$script = preg_replace('/(static function create\(.*?\$query = new )([^\(]+)/s','$1static', $script);
 	}

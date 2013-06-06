@@ -32,6 +32,18 @@ class PropelTestCase extends TestCase {
 		<behavior name="event" />
 		<behavior name="extend" />
     </table>
+	<table name="si_thing">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="name" type="varchar" size="255" primaryString="true" />
+			
+		<column name="class_key" type="INTEGER" inheritance="single">
+			<inheritance key="1" class="SiThingA"/>
+			<inheritance key="2" class="SiThingB"/>
+		</column>
+			
+		<behavior name="event" />
+		<behavior name="extend" />
+    </table>
 </database>
 SCHEMA;
 	

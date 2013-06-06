@@ -26,16 +26,20 @@ use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookQuery;
 
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookPeer;
 
+use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThingQuery;
+
+use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThing;
+
 /**
  * @author Arkadiusz Dzięgiel
  */
 class PropelExtendingTest extends PropelTestCase {
 	
-	public function setUp()
-	{
+	protected function setUp(){
 		self::$map = array(
 			self::$modelClass => self::$extendedClass,
-			'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\TrianglePerson' => 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedTrianglePerson'
+			'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\TrianglePerson' => 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedTrianglePerson',
+			'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThing' => 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedSiThing'
 		);
 		
 		$this->loadAndBuild();
@@ -84,6 +88,7 @@ class PropelExtendingTest extends PropelTestCase {
 	}
 	
 	public function testService(){
+		
 		$org = 'OriginalClass';
 		$ext = 'ExtendedClass';
 		
@@ -123,5 +128,17 @@ class PropelExtendingTest extends PropelTestCase {
 			$this->fail('Exception on non existent class');
 		}catch(\LogicException $e){
 		}
+	}
+	
+	//https://github.com/glorpen/GlorpenPropelBundle/issues/2
+	public function testSingleInheritance(){
+		
+		$this->setUpListener();
+		\Propel::disableInstancePooling();
+		
+		$p = new SiThing();
+		$p->save();
+		
+		$this->assertInstanceOf('Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedSiThing', SiThingQuery::create()->findPk($p->getPrimaryKey()));
 	}
 }
