@@ -2,6 +2,9 @@
 GlorpenPropelBundle
 -------------------
 
+.. image:: https://travis-ci.org/glorpen/GlorpenPropelBundle.png?branch=master
+
+
 Additional integration Propel with Symfony2.
 
 
