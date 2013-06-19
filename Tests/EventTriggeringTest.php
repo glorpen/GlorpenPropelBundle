@@ -57,8 +57,10 @@ class EventTriggeringTest extends PropelTestCase {
 	
 	public function testContainerSetting(){
 		
-		EventDispatcherProxy::setDispatcherGetter(function(){
-			$c = $this->getContainer();
+		$that = $this;
+		
+		EventDispatcherProxy::setDispatcherGetter(function() use ($that){
+			$c = $that->getContainer();
 			$d = new ContainerAwareEventDispatcher($c);
 			
 			$d->addListener('model.construct', array(new ContainerAwareModel($c), 'onModelConstruct'));
@@ -78,8 +80,10 @@ class EventTriggeringTest extends PropelTestCase {
 			$triggered->{$e} = 0;
 		}
 		
-		EventDispatcherProxy::setDispatcherGetter(function() use (&$triggered, $events){
-			$c = $this->getContainer();
+		$that = $this;
+		
+		EventDispatcherProxy::setDispatcherGetter(function() use ($that, &$triggered, $events){
+			$c = $that->getContainer();
 			$d = new ContainerAwareEventDispatcher($c);
 				
 			foreach($events as $e){

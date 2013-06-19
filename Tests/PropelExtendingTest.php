@@ -48,14 +48,15 @@ class PropelExtendingTest extends PropelTestCase {
 	static protected $extendedClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedBook';
 	static protected $modelClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book';
 	
-	static protected $map;
+	static public $map;
 	
 	protected function setUpListener(){
-		EventDispatcherProxy::setDispatcherGetter(function(){
-			$c = $this->getContainer();
+		$that = $this;
+		EventDispatcherProxy::setDispatcherGetter(function() use ($that){
+			$c = $that->getContainer();
 			$d = new ContainerAwareEventDispatcher($c);
 				
-			$d->addListener('om.detect', array(new OMClassOverrider(self::$map), 'onDetectionRequest'));
+			$d->addListener('om.detect', array(new OMClassOverrider(PropelExtendingTest::$map), 'onDetectionRequest'));
 				
 			return $d;
 		});
