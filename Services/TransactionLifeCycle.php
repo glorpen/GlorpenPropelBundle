@@ -54,6 +54,7 @@ class TransactionLifeCycle implements EventSubscriberInterface {
 	}
 	
 	public function onRollback(ConnectionEvent $event){
+		$this->models = array(); //there sould be error in commit so clear cached models
 		$models = $this->processedModels;
 		$this->processedModels = array();
 		$this->applyTransactionState(false, $models, $event->getConnection());

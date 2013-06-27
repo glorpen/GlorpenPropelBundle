@@ -207,6 +207,7 @@ class EventTriggeringTest extends PropelTestCase {
 		}
 		
 		$this->assertEquals(false, $a->commited || $a->rolledback, 'Commited and rolledback hooks are not run if DB transaction didn\'t commit');
+		$this->assertClearCache($service);
 		
 		$faulty->setTitle("test");
 		$faulty->enableTransactionError();
@@ -224,7 +225,7 @@ class EventTriggeringTest extends PropelTestCase {
 		
 		$this->assertEquals(true, $a->rolledback, 'Commited model was rolled back');
 		$this->assertEquals(false, $b->rolledback || $faulty->rolledback, 'Uncommited models were not rolled back');
-		
+		$this->assertClearCache($service);
 		
 		$con->beginTransaction();
 		try{
@@ -235,17 +236,21 @@ class EventTriggeringTest extends PropelTestCase {
 			$this->fail("Successful commit");
 		}
 		
+		$this->assertClearCache($service);
+	}
+	
+	protected function assertClearCache(TransactionLifeCycle $service){
 		//check if cache is clear
 		
 		$r = new \ReflectionObject($service);
 		
 		$refModels = $r->getProperty("models");
 		$refModels->setAccessible(true);
-		$this->assertCount(0, $refModels->getValue($service));
+		$this->assertCount(0, $refModels->getValue($service), 'Service cached models');
 		
 		$refModels = $r->getProperty("processedModels");
 		$refModels->setAccessible(true);
-		$this->assertCount(0, $refModels->getValue($service));
+		$this->assertCount(0, $refModels->getValue($service), 'Service cached processed models');
 	}
 	
 }
