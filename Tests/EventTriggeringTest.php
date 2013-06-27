@@ -10,6 +10,10 @@
 
 namespace Glorpen\Propel\PropelBundle\Tests;
 
+use Glorpen\Propel\PropelBundle\Services\TransactionLifeCycle;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 
 use Glorpen\Propel\PropelBundle\Events\PeerEvent;
@@ -39,21 +43,11 @@ class EventTriggeringTest extends PropelTestCase {
 	
 	public function setUp()
 	{
+		parent::setUp();
 		$this->loadAndBuild();
 	}
 	
 	private $oldConnection;
-	
-	protected function replaceConnection(){
-		$con = new EventPropelPDO('sqlite::memory:');
-		$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
-		$this->oldConnection = \Propel::getConnection('books');
-		\Propel::setConnection('books', $con);
-	}
-	
-	protected function revertConnection(){
-		\Propel::setConnection('books', $this->oldConnection);
-	}
 	
 	public function testContainerSetting(){
 		
@@ -77,7 +71,7 @@ class EventTriggeringTest extends PropelTestCase {
 		$events = func_get_args();
 		
 		foreach($events as $e){
-			$triggered->{$e} = 0;
+			if(is_string($e)) $triggered->{$e} = 0;
 		}
 		
 		$that = $this;
@@ -85,11 +79,15 @@ class EventTriggeringTest extends PropelTestCase {
 		EventDispatcherProxy::setDispatcherGetter(function() use ($that, &$triggered, $events){
 			$c = $that->getContainer();
 			$d = new ContainerAwareEventDispatcher($c);
-				
+			
 			foreach($events as $e){
-				$d->addListener($e, function() use($e, &$triggered){
-					$triggered->{$e}++;
-				});
+				if($e instanceof EventSubscriberInterface){
+					$d->addSubscriber($e);
+				} else {
+					$d->addListener($e, function() use($e, &$triggered){
+						$triggered->{$e}++;
+					});
+				}
 			}
 		
 			return $d;
@@ -149,7 +147,7 @@ class EventTriggeringTest extends PropelTestCase {
 		//connection
 		
 		$ctx = $this->setUpEventHandlers('connection.create');
-		$this->replaceConnection();
+		$con = new EventPropelPDO("sqlite::memory:");
 		$this->assertEventTriggered('On connection create', $ctx, 1);
 		
 		$ctx = $this->setUpEventHandlers('connection.commit.pre','connection.commit.post');
@@ -171,8 +169,6 @@ class EventTriggeringTest extends PropelTestCase {
 		$this->assertEventTriggered('On connection nested rollback', $ctx, 0,0);
 		$con->rollBack();
 		$this->assertEventTriggered('On connection rollback', $ctx, 1,1);
-		
-		$this->revertConnection();
 	}
 	
 	public function testEvents(){
@@ -186,4 +182,70 @@ class EventTriggeringTest extends PropelTestCase {
 		$e = new QueryEvent($q=new BookQuery());
 		$this->assertSame($q, $e->getQuery());
 	}
+	
+	public function testTransaction(){
+		$con = \Propel::getConnection();
+		
+		$service = new TransactionLifeCycle();
+		
+		$a = new Book();
+		$faulty = new Book();
+		$b = new Book();
+		
+		$ctx = $this->setUpEventHandlers($service);
+		$faulty->setTitle(new \stdClass());
+		
+		$con->beginTransaction();
+		
+		try{
+			$a->save();
+			$faulty->save();
+			$b->save();
+			$this->fail("Transaction handling");
+		} catch(\Exception $e){
+			$con->rollBack();
+		}
+		
+		$this->assertEquals(false, $a->commited || $a->rolledback, 'Commited and rolledback hooks are not run if DB transaction didn\'t commit');
+		
+		$faulty->setTitle("test");
+		$faulty->enableTransactionError();
+		
+		$con->beginTransaction();
+		try{
+			$a->save();
+			$faulty->save();
+			$b->save();
+			$con->commit();
+			$this->fail("Transaction faulty commit handling");
+		} catch(\Exception $e){
+			$con->rollBack();
+		}
+		
+		$this->assertEquals(true, $a->rolledback, 'Commited model was rolled back');
+		$this->assertEquals(false, $b->rolledback || $faulty->rolledback, 'Uncommited models were not rolled back');
+		
+		
+		$con->beginTransaction();
+		try{
+			$a->save();
+			$b->save();
+			$con->commit();
+		} catch(\Exception $e){
+			$this->fail("Successful commit");
+		}
+		
+		//check if cache is clear
+		
+		$r = new \ReflectionObject($service);
+		
+		$refModels = $r->getProperty("models");
+		$refModels->setAccessible(true);
+		$this->assertCount(0, $refModels->getValue($service));
+		
+		$refModels = $r->getProperty("processedModels");
+		$refModels->setAccessible(true);
+		$this->assertCount(0, $refModels->getValue($service));
+	}
+	
 }

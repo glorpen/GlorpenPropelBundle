@@ -11,6 +11,7 @@ use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use Glorpen\Propel\PropelBundle\Events\ConnectionEvent;
 
 /**
+ * TODO: multiple connections
  * @author Arkadiusz Dzięgiel
  */
 class TransactionLifeCycle implements EventSubscriberInterface {

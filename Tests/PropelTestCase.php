@@ -1,6 +1,8 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Tests;
 
+use Glorpen\Propel\PropelBundle\Connection\EventPropelPDO;
+
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -74,6 +76,8 @@ SCHEMA;
 		require_once static::$root . '/../vendor/propel/propel1/generator/lib/util/PropelQuickBuilder.php';
 	}
 	
+	protected $builder;
+	
 	protected function loadAndBuild(){
 		$this->loadPropelQuickBuilder();
 	
@@ -86,6 +90,15 @@ SCHEMA;
 			$builder->setSchema(static::$schema);
 			$builder->setClassTargets(array('tablemap', 'peer', 'object', 'query', 'peerstub', 'querystub'));
 			$builder->build();
+			
+			$con = new EventPropelPDO('sqlite::memory:');
+			$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+			
+			$name = $builder->getDatabase()->getName();
+			\Propel::setConnection($name, $con, \Propel::CONNECTION_READ);
+			\Propel::setConnection($name, $con, \Propel::CONNECTION_WRITE);
+			
+			$builder->buildSQL($con);
 		}
 	}
 }

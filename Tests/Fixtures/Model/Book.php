@@ -18,4 +18,22 @@ class Book extends BaseBook implements ContainerAwareInterface {
 	public function hasContainer(){
 		return $this->container !== null;
 	}
+	
+	public $commited = false;
+	public $rolledback = false;
+	
+	public function preCommit(\PropelPDO $con = null){
+		if($this->transactionError){
+			throw new \Exception("some transaction error");
+		}
+		$this->commited = true;
+	}
+	public function preRollback(\PropelPDO $con = null){
+		$this->rolledback = true;
+	}
+	
+	protected $transactionError = false;
+	public function enableTransactionError(){
+		$this->transactionError = true;
+	}
 }
