@@ -237,20 +237,27 @@ class EventTriggeringTest extends PropelTestCase {
 		}
 		
 		$this->assertClearCache($service);
+		
+		$ctx = $this->setUpEventHandlers('connection.commit.pre', $service);
+		$a->setTitle("test");
+		$a->save();
+		
+		$this->assertEventTriggered('Transaction events on singular model', $ctx, 1);
+		$this->assertClearCache($service, 'Single commit');
 	}
 	
-	protected function assertClearCache(TransactionLifeCycle $service){
+	protected function assertClearCache(TransactionLifeCycle $service, $msg=null){
 		//check if cache is clear
 		
 		$r = new \ReflectionObject($service);
 		
 		$refModels = $r->getProperty("models");
 		$refModels->setAccessible(true);
-		$this->assertCount(0, $refModels->getValue($service), 'Service cached models');
+		$this->assertCount(0, $refModels->getValue($service), 'Service cached models'.($msg?' - '.$msg:''));
 		
 		$refModels = $r->getProperty("processedModels");
 		$refModels->setAccessible(true);
-		$this->assertCount(0, $refModels->getValue($service), 'Service cached processed models');
+		$this->assertCount(0, $refModels->getValue($service), 'Service cached processed models'.($msg?' - '.$msg:''));
 	}
 	
 }
