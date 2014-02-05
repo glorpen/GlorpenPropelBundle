@@ -22,6 +22,7 @@
         <service id="glorpen.propel.listeners.container_aware" class="%glorpen.propel.listeners.container_aware.class%">
         	<argument type="service" id="service_container" />
         	<tag name="propel.event" method="onModelConstruct" event="model.construct" />
+        	<tag name="propel.event" method="onQueryConstruct" event="query.construct" />
         </service>
         <service id="glorpen.propel.listeners.transaction_aware" class="%glorpen.propel.listeners.transaction_aware.class%">
         	<tag name="propel.event" />
