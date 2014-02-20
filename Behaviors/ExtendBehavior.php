@@ -36,6 +36,7 @@ EOF;
 	
 	public function staticMethods($builder){
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Events\DetectOMClassEvent');
+		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Dispatcher\\EventDispatcherProxy');
 	}
 	
 	public function queryMethods($builder){
