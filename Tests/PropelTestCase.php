@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Propel\PropelBundle\Tests\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 class PropelTestCase extends TestCase {
 	
@@ -83,12 +84,15 @@ SCHEMA;
 	
 		if(!class_exists('Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book', false)){
 			$builder = new \PropelQuickBuilder();
+			
+			//var_dump(Yaml::parse('{a:1,a:2,a:3}'));die();
 				
 			$builder->getConfig()->setBuildProperty('behaviorEventClass', 'Behaviors.EventBehavior');
 			$builder->getConfig()->setBuildProperty('behaviorExtendClass', 'Behaviors.ExtendBehavior');
 				
 			$builder->setSchema(static::$schema);
 			$builder->setClassTargets(array('tablemap', 'peer', 'object', 'query', 'peerstub', 'querystub'));
+			file_put_contents("/tmp/a.php",$builder->getClasses());
 			$builder->build();
 			
 			$con = new EventPropelPDO('sqlite::memory:');

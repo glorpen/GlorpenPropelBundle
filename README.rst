@@ -310,16 +310,7 @@ If you didn't import *config.yml* providen by this bundle, you have to add *exte
        propel.behavior.extend.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.ExtendBehavior'
        propel.behavior.default: "extend"
 
-Usage
------
-
-With behavior enabled you can define custom model classes for use with Propel. In *config.yml*:
-
-.. sourcecode:: yaml
-
-   glorpen_propel:
-     extended_models:
-       FOS\UserBundle\Propel\User: MyApp\MyBundle\Propel\User
+With behavior enabled you can define custom model classes for use with Propel.
 
 You can extend only Model classes this way (extending Peers/Queries shouldn't be needed).
 
@@ -330,6 +321,35 @@ In short it fixes:
 -  extending Model classes used by other bundles (eg. FOSUserBundle)
 -  queries/peer's returning proper isntances
 -  creating proper Query instance when calling `SomeQuery::create()` 
+
+
+Mapping usage
+-------------
+
+In *config.yml*:
+
+.. sourcecode:: yaml
+
+   glorpen_propel:
+     extended_models:
+       FOS\UserBundle\Propel\User: MyApp\MyBundle\Propel\User
+
+
+Dynamic/Services usage
+----------------------
+
+You can create dynamic extends by using services.
+
+Your service should implement *Glorpen\Propel\PropelBundle\Provider\OMClassProvider* interface.
+
+In *services.xml*:
+
+.. sourcecode:: xml
+
+   <service id="your.service" class="%your.service.class%">
+      <argument>%your.service.argument%</argument>
+      <tag name="propel.om" />
+   </service>
 
 
 FOSUserBundle and AdminGenerator

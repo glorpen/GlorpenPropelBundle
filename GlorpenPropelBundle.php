@@ -27,6 +27,8 @@ use Glorpen\Propel\PropelBundle\DependencyInjection\Compiler\PropelEventPass;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+use Glorpen\Propel\PropelBundle\DependencyInjection\Compiler\PropelOMPass;
+
 /**
  * @author Arkadiusz Dzięgiel
  */
@@ -36,6 +38,7 @@ class GlorpenPropelBundle extends Bundle
 	public function build(ContainerBuilder $container)
 	{
 		$container->addCompilerPass(new PropelEventPass());
+		$container->addCompilerPass(new PropelOMPass());
 	}
 	
 	public function boot()

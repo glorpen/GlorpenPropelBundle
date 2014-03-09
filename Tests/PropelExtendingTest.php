@@ -30,6 +30,8 @@ use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThingQuery;
 
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThing;
 
+use Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\TestOMProvider;
+
 /**
  * @author Arkadiusz Dzięgiel
  */
@@ -96,9 +98,22 @@ class PropelExtendingTest extends PropelTestCase {
 		$s = new OMClassOverrider(array($org=>$ext));
 		
 		$this->assertEquals($ext, $s->getClassForOM($org));
-		$this->assertEquals($org, $s->getExtendedClass($ext));
-		$this->assertSame(null, $s->getExtendedClass('not existent'));
 		$this->assertSame(null, $s->getClassForOM('not existent'));
+		
+		$clsObject = (object) array('cls'=>$ext);
+		$p = new TestOMProvider(array($org), function() use ($clsObject) {
+			return $clsObject->cls;
+		});
+		$s->addProvider($p);
+		
+		$this->assertEquals($ext, $s->getClassForOM($org));
+		$this->assertSame(null, $s->getClassForOM('not existent'));
+		
+		$clsObject->cls = 'SomeClass';
+		$this->assertEquals($clsObject->cls, $s->getClassForOM($org), 'return class from service');
+		
+		$clsObject->cls = null;
+		$this->assertEquals($ext, $s->getClassForOM($org), 'revert to map if no response from service');
 	}
 
 	public function testClassFinder(){
