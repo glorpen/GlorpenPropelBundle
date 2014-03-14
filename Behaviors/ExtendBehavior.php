@@ -8,7 +8,7 @@ class ExtendBehavior extends Behavior {
 		
 		$getOMClass = <<<EOF
 \\1
-		\$event = new DetectOMClassEvent(\\2);
+		\$event = new DetectOMClassEvent(\\2, \$row, \$colnum);
 		EventDispatcherProxy::trigger('om.detect', \$event);
 		if(\$event->isDetected()){
 			return \$event->getDetectedClass();

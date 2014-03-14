@@ -12,15 +12,20 @@ class OMClassOverrider {
 	
 	private $classes = array();
 	private $providers = array();
+	private $dynamicClasses = array();
 	
 	public function __construct(array $map){
 		$this->classes = $map;
 	}
 	
 	public function addProvider(OMClassProvider $provider){
-		foreach($provider->getSubscribedClasses() as $cls){
-			if(!array_key_exists($cls, $this->providers)) $this->providers[$cls] = array();
-			$this->providers[$cls][] = $provider;
+		foreach($provider->getMapping() as $cls=>$baseClass){
+			if(!array_key_exists($baseClass, $this->providers)) $this->providers[$baseClass] = array();
+			$this->providers[$baseClass][] = $provider;
+			if(array_key_exists($cls, $this->dynamicClasses)){
+				throw new \RuntimeException("Class $cls is already mapped");
+			}
+			$this->dynamicClasses[$cls] = $baseClass;
 		}
 	}
 	
@@ -36,6 +41,19 @@ class OMClassOverrider {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns base class
+	 * @param string $class
+	 * @return string
+	 */
+	public function getExtendedClass($class){
+		if(array_key_exists($class, $this->dynamicClasses)){
+			$ret = $this->dynamicClasses[$class];
+		}
+		if(!$ret) $ret = array_search($class, $this->classes);
+		return $ret?$ret:null;
 	}
 	
 	public function onDetectionRequest(DetectOMClassEvent $e){

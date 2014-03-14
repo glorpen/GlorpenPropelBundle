@@ -54,14 +54,17 @@ class PropelExtendingTest extends PropelTestCase {
 	
 	protected function setUpListener(){
 		$that = $this;
-		EventDispatcherProxy::setDispatcherGetter(function() use ($that){
+		$overrider = new OMClassOverrider(PropelExtendingTest::$map);
+		EventDispatcherProxy::setDispatcherGetter(function() use ($that, $overrider){
 			$c = $that->getContainer();
 			$d = new ContainerAwareEventDispatcher($c);
-				
-			$d->addListener('om.detect', array(new OMClassOverrider(PropelExtendingTest::$map), 'onDetectionRequest'));
+			
+			$d->addListener('om.detect', array($overrider, 'onDetectionRequest'));
 				
 			return $d;
 		});
+		
+		return $overrider;
 	}
 	
 	public function testExtending(){
@@ -101,13 +104,19 @@ class PropelExtendingTest extends PropelTestCase {
 		$this->assertSame(null, $s->getClassForOM('not existent'));
 		
 		$clsObject = (object) array('cls'=>$ext);
-		$p = new TestOMProvider(array($org), function() use ($clsObject) {
+		$p = new TestOMProvider(function() use ($clsObject) {
 			return $clsObject->cls;
-		});
+		}, array(
+			'SomeA' => $org,
+			'SomeB' => $org
+		));
 		$s->addProvider($p);
 		
 		$this->assertEquals($ext, $s->getClassForOM($org));
 		$this->assertSame(null, $s->getClassForOM('not existent'));
+		
+		$this->assertEquals($org, $s->getExtendedClass('SomeA'));
+		$this->assertEquals($org, $s->getExtendedClass('SomeB'));
 		
 		$clsObject->cls = 'SomeClass';
 		$this->assertEquals($clsObject->cls, $s->getClassForOM($org), 'return class from service');
@@ -156,5 +165,44 @@ class PropelExtendingTest extends PropelTestCase {
 		$p->save();
 		
 		$this->assertInstanceOf('Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedSiThing', SiThingQuery::create()->findPk($p->getPrimaryKey()));
+	}
+	
+	//inspiration: https://bitbucket.org/glorpen/glorpenpropelbundle/pull-request/2/change-xpeer-getomclass-to-self-getomclass/diff
+	public function testQueryModelClassOverride(){
+		
+		$manualFirst = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ManualBook';
+		$manualSecond = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ManualSecondBook';
+		
+		\Propel::disableInstancePooling();
+		
+		$o = $this->setUpListener();
+		$p = new TestOMProvider(
+			function($row, $cols) use($manualFirst, $manualSecond){
+				if($row[0]==1){
+					return $manualFirst;
+				} else {
+					return $manualSecond;
+				}	
+			},
+			array(
+				$manualFirst=>self::$modelClass,
+				$manualSecond=>self::$modelClass
+			)
+		);
+		$o->addProvider($p);
+		
+		$b = new Book();
+		$b->setTitle("extended-title");
+		$b->save();
+		
+		$b = new Book();
+		$b->setTitle("extended-title2");
+		$b->save();
+		
+		$manual1 = BookQuery::create()->filterById(1)->findOne();
+		$this->assertInstanceOf($manualFirst, $manual1);
+		
+		$manual2 = BookQuery::create()->filterById(2)->findOne();
+		$this->assertInstanceOf($manualSecond, $manual2);
 	}
 }

@@ -10,8 +10,10 @@ use Symfony\Component\EventDispatcher\Event;
 class DetectOMClassEvent extends Event {
 	private $cls, $detectedClass, $row, $col;
 	
-	public function __construct($cls){
+	public function __construct($cls, $row, $col){
 		$this->cls = $cls;
+		$this->row = $row;
+		$this->col = $col;
 	}
 	
 	public function getClass(){
@@ -30,16 +32,8 @@ class DetectOMClassEvent extends Event {
 		return $this->detectedClass;
 	}
 	
-	public function setRow($row){
-		$this->row = $row;
-	}
-	
 	public function getRow(){
 		return $this->row;
-	}
-	
-	public function setCol($col){
-		$this->col = $col;
 	}
 	
 	public function getCol(){

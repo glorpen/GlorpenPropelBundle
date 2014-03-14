@@ -6,19 +6,19 @@ use Glorpen\Propel\PropelBundle\Provider\OMClassProvider;
 
 class TestOMProvider implements OMClassProvider {
 
-	protected $from, $to;
+	protected $to, $map;
 	
-	public function __construct($from, \Closure $to){
-		$this->from = $from;
+	public function __construct(\Closure $to, $map){
 		$this->to = $to;
+		$this->map = $map;
 	}
 	
-	public function getSubscribedClasses() {
-		return $this->from;
-	}
-
 	public function getOMClass($row, $col) {
 		return call_user_func($this->to, $row, $col);
+	}
+
+	public function getMapping() {
+		return $this->map;
 	}
 
 }

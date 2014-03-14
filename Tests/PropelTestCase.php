@@ -19,6 +19,7 @@ class PropelTestCase extends TestCase {
     <table name="book">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
         <column name="title" type="varchar" size="255" primaryString="true" />
+			
 		<behavior name="event" />
 		<behavior name="extend" />
     </table>
