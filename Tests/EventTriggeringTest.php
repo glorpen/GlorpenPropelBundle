@@ -36,6 +36,10 @@ use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookQuery;
 
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookPeer;
 
+use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SoftdeleteTable;
+
+use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\om\BaseSoftdeleteTableQuery;
+
 /**
  * @author Arkadiusz Dzięgiel
  */
@@ -124,7 +128,7 @@ class EventTriggeringTest extends PropelTestCase {
 		
 		$ctx = $this->setUpEventHandlers('model.delete.post','model.delete.pre', 'delete.pre', 'delete.post');
 		$m->delete();
-		$this->assertEventTriggered('On model delete', $ctx, 1,1,2,2);
+		$this->assertEventTriggered('On model delete', $ctx, 1,1,2,2); // 2,2 for pre/postDelete from Query object
 		
 		//query
 		
@@ -258,6 +262,41 @@ class EventTriggeringTest extends PropelTestCase {
 		$refModels = $r->getProperty("processedModels");
 		$refModels->setAccessible(true);
 		$this->assertCount(0, $refModels->getValue($service), 'Service cached processed models'.($msg?' - '.$msg:''));
+	}
+	
+	public function testPreEventWithSoftDeleteBehavior(){
+		$that = $this;
+		$order = array();
+		
+		EventDispatcherProxy::setDispatcherGetter(function() use ($that, &$order){
+			$c = $that->getContainer();
+			$d = new ContainerAwareEventDispatcher($c);
+				
+			$d->addListener('model.delete.pre', function($e) use ($that, &$order){
+				$order[] = 'model.delete.pre';
+			});
+			$d->addListener('delete.pre', function($e) use ($that, &$order){
+				$order[] = 'delete.pre';
+			});
+			$d->addListener('query.delete.pre', function($e) use ($that, &$order){
+				$order[] = 'query.delete.pre';
+			});
+			
+			return $d;
+		});
+		
+		$m = new SoftdeleteTable();
+		$m->save();
+		$m->delete();
+		
+		$that->assertContains('model.delete.pre', $order, 'Delete model event');
+		$that->assertContains('delete.pre', $order, 'Model global delete event');
+		
+		$order = array();
+		
+		BaseSoftdeleteTableQuery::create()->filterById(1)->delete();
+		$that->assertContains('delete.pre', $order, 'Query global delete event');
+		$that->assertContains('query.delete.pre', $order, 'Query delete event');
 	}
 	
 }

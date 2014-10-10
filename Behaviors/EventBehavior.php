@@ -1,6 +1,8 @@
 <?php
 class EventBehavior extends Behavior {
 	
+	protected $tableModificationOrder = 51;
+	
 	protected $parameters = array();
 	
 	public function postInsert(){
@@ -34,11 +36,6 @@ EOF;
 EventDispatcherProxy::trigger(array('update.pre', 'model.update.pre'), new ModelEvent(\$this));
 EOF;
 	}
-	public function preDelete(){
-		return <<<EOF
-EventDispatcherProxy::trigger(array('delete.pre','model.delete.pre'), new ModelEvent(\$this));
-EOF;
-	}
 	public function preSave(){
 		return <<<EOF
 EventDispatcherProxy::trigger('model.save.pre', new ModelEvent(\$this));
@@ -47,7 +44,7 @@ EOF;
 	
 	public function preDeleteQuery(){
 		return <<<EOF
-EventDispatcherProxy::trigger(array('delete.pre','query.delete.pre'), new QueryEvent(\$this));
+// placeholder, issue #5
 EOF;
 	}
 	
@@ -92,6 +89,10 @@ public function __construct(){
 EOF;
 			$script = preg_replace('#(public function .*?}.*?)(/\*\*)#s', '\1'.$construct.'\2', $script, 1);
 		}
+		
+		// fix for SoftDelete - handle preDelete as script filter
+		$script = preg_replace('/(([\t ]+)public function delete.*?try[^{]{)/s', '\1'."\n".'\2\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'model.delete.pre\'), new ModelEvent(\$this));', $script, 1);
+		
 	}
 	
 	public function queryFilter(&$script)
@@ -101,6 +102,9 @@ EOF;
 	
 EOF;
 		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script);
+		
+		// fix for SoftDelete - handle preDelete as script filter
+		$script = preg_replace('/(([\t ]+)protected function basePreDelete.*?{)/s', '\1'."\n".'\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'query.delete.pre\'), new QueryEvent(\$this));', $script, 1);
 	}
 	
 	public function peerFilter(&$script){

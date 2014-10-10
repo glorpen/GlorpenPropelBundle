@@ -48,6 +48,11 @@ class PropelTestCase extends TestCase {
 		<behavior name="event" />
 		<behavior name="extend" />
     </table>
+	<table name="softdelete_table">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<behavior name="soft_delete" /> <!-- note it is before "event" -->
+		<behavior name="event" />
+	</table>
 </database>
 SCHEMA;
 	
@@ -86,8 +91,6 @@ SCHEMA;
 		if(!class_exists('Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book', false)){
 			$builder = new \PropelQuickBuilder();
 			
-			//var_dump(Yaml::parse('{a:1,a:2,a:3}'));die();
-				
 			$builder->getConfig()->setBuildProperty('behaviorEventClass', 'Behaviors.EventBehavior');
 			$builder->getConfig()->setBuildProperty('behaviorExtendClass', 'Behaviors.ExtendBehavior');
 				
