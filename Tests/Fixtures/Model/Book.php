@@ -19,6 +19,12 @@ class Book extends BaseBook implements ContainerAwareInterface {
 		return $this->container !== null;
 	}
 	
+	public function setRawTitle($v){
+		$this->setTitle('');
+		$this->title = $v;
+		return $this;
+	}
+	
 	public $commited = false;
 	public $rolledback = false;
 	

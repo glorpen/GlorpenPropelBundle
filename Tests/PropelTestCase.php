@@ -56,10 +56,10 @@ class PropelTestCase extends TestCase {
 </database>
 SCHEMA;
 	
-	protected function setUp()
+	public static function setUpBeforeClass()
 	{
 		if (!file_exists($file = static::$root . '/../vendor/propel/propel1/runtime/lib/Propel.php')) {
-			$this->markTestSkipped('Propel is not available.');
+			self::markTestSkipped('Propel is not available.');
 		}
 	
 		require_once $file;

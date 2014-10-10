@@ -197,7 +197,7 @@ class EventTriggeringTest extends PropelTestCase {
 		$b = new Book();
 		
 		$ctx = $this->setUpEventHandlers($service);
-		$faulty->setTitle(new \stdClass());
+		$faulty->setRawTitle(new \stdClass());
 		
 		$con->beginTransaction();
 		

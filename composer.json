@@ -8,7 +8,8 @@
         "propel/propel-bundle": "1.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "propel/propel-bundle": ">=1.4.4"
     },
     "authors": [
         {
