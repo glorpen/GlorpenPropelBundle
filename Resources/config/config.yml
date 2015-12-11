@@ -4,4 +4,4 @@ propel:
     propel.behavior.extend.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.ExtendBehavior'
     propel.behavior.default: "event, extend"
   dbal:
-    classname: Glorpen\Propel\PropelBundle\Connection\EventPropelPDO
+    classname: "Glorpen\\Propel\\PropelBundle\\Connection\\EventPropelPDO"

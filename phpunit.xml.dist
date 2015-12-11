@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./Tests/bootstrap.php">
+<phpunit bootstrap="./vendor/autoload.php">
   <php>
-    <server name="SYMFONY" value="./vendor/symfony/symfony/src" />
     <!-- <server name="KERNEL_DIR" value="./Tests/Resources" /> -->
   </php>
   <testsuites>
