@@ -96,7 +96,7 @@ SCHEMA;
 				
 			$builder->setSchema(static::$schema);
 			$builder->setClassTargets(array('tablemap', 'peer', 'object', 'query', 'peerstub', 'querystub'));
-			file_put_contents("/tmp/a.php",$builder->getClasses());
+			//file_put_contents("/tmp/a.php",$builder->getClasses());
 			$builder->build();
 			
 			$con = new EventPropelPDO('sqlite::memory:');
