@@ -131,6 +131,11 @@ Event class: `ModelEvent`
 - model.delete.pre
 - model.save.pre
 - model.construct
+- model.update.after
+- model.insert.after
+- model.save.after
+
+Events named `model.*.after` are triggered after transaction is commited but before returning from `$model->save()` method.
 
 Event class: `QueryEvent`
 
