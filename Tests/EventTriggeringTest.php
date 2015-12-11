@@ -109,6 +109,20 @@ class EventTriggeringTest extends PropelTestCase {
 		}
 	}
 	
+	public function testAfterEventsTriggering(){
+	    
+	    $m = new Book();
+	    
+	    $ctx = $this->setUpEventHandlers('model.save.after', 'model.insert.after');
+	    $m->save();
+	    $this->assertEventTriggered('After new model save', $ctx, 1, 1);
+	    
+	    $ctx = $this->setUpEventHandlers('model.save.after', 'model.update.after');
+	    $m->setTitle('title');
+	    $m->save();
+	    $this->assertEventTriggered('After model update', $ctx, 1, 1);
+	}
+	
 	public function testEventsTriggering(){
 		
 		//model

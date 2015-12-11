@@ -6,40 +6,26 @@ class EventBehavior extends Behavior {
 	protected $parameters = array();
 	
 	public function postInsert(){
-		return <<<EOF
-EventDispatcherProxy::trigger('model.insert.post', new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('model.insert.post'));
 	}
 	public function postUpdate(){
-		return <<<EOF
-EventDispatcherProxy::trigger(array('update.post', 'model.update.post'), new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('update.post', 'model.update.post'));
 	}
 	public function postDelete(){
-		return <<<EOF
-EventDispatcherProxy::trigger(array('delete.post', 'model.delete.post'), new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('delete.post', 'model.delete.post'));
 	}
 	public function postSave(){
-		return <<<EOF
-EventDispatcherProxy::trigger('model.save.post', new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('model.save.post'));
 	}
 	
 	public function preInsert(){
-		return <<<EOF
-EventDispatcherProxy::trigger('model.insert.pre', new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('model.insert.pre'));
 	}
 	public function preUpdate(){
-		return <<<EOF
-EventDispatcherProxy::trigger(array('update.pre', 'model.update.pre'), new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('update.pre', 'model.update.pre'));
 	}
 	public function preSave(){
-		return <<<EOF
-EventDispatcherProxy::trigger('model.save.pre', new ModelEvent(\$this));
-EOF;
+	    return $this->getModelHook(array('model.save.pre'));
 	}
 	
 	public function preDeleteQuery(){
@@ -72,6 +58,10 @@ EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new Que
 EOF;
 	}
 	
+	protected function getModelHook(array $events){
+	    $sEvents = 'array(\''.implode('\',\'', $events).'\')';
+	    return 'EventDispatcherProxy::trigger('.$sEvents.', new ModelEvent($this));';
+	}
 	
 	public function objectFilter(&$script){
 		$rep = <<<EOF
@@ -93,6 +83,23 @@ EOF;
 		// fix for SoftDelete - handle preDelete as script filter
 		$script = preg_replace('/(([\t ]+)public function delete.*?try[^{]{)/s', '\1'."\n".'\2\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'model.delete.pre\'), new ModelEvent(\$this));', $script, 1);
 		
+		// add hooks after successful commit
+		$afterHooks = <<<EOF
+\\1\\4
+
+\\2\\2if(\$isInsert){
+\\2\\2\\2{$this->getModelHook(array('model.insert.after'))}
+\\2\\2} else {
+\\2\\2\\2{$this->getModelHook(array('model.update.after'))}
+\\2\\2}
+
+\\2\\2{$this->getModelHook(array('model.save.after'))}
+
+\\2\\2\\3
+EOF;
+		$script = preg_replace('/(([\t ]+)public function save.*?)(return.*?;)([\n\s]+} catch.*?throw \$e;\s+})/s', $afterHooks, $script, 1);
+		
+		//$script = preg_replace(
 	}
 	
 	public function queryFilter(&$script)
@@ -144,7 +151,8 @@ EOF;
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Dispatcher\\EventDispatcherProxy');
 	}
 	
-	public function staticMethods($builder){
+	public function staticMethods($builder)
+	{
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Events\\PeerEvent');
 		$builder->declareClass('Glorpen\\Propel\\PropelBundle\\Dispatcher\\EventDispatcherProxy');
 	}
