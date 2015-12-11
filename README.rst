@@ -137,6 +137,8 @@ Event class: `ModelEvent`
 
 Events named `model.*.after` are triggered after transaction is commited but before returning from `$model->save()` method.
 
+Additionally it will trigger only if something was updated/inserted, it will NOT trigger on empty save, eg: `$model->save()->save()`.
+
 Event class: `QueryEvent`
 
 - query.delete.pre
