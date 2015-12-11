@@ -84,22 +84,36 @@ EOF;
 		$script = preg_replace('/(([\t ]+)public function delete.*?try[^{]{)/s', '\1'."\n".'\2\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'model.delete.pre\'), new ModelEvent(\$this));', $script, 1);
 		
 		// add hooks after successful commit
-		$afterHooks = <<<EOF
-\\1\\4
-
-\\2\\2if(\$isInsert){
-\\2\\2\\2{$this->getModelHook(array('model.insert.after'))}
-\\2\\2} else {
-\\2\\2\\2{$this->getModelHook(array('model.update.after'))}
-\\2\\2}
-
-\\2\\2{$this->getModelHook(array('model.save.after'))}
-
-\\2\\2\\3
-EOF;
-		$script = preg_replace('/(([\t ]+)public function save.*?)(return.*?;)([\n\s]+} catch.*?throw \$e;\s+})/s', $afterHooks, $script, 1);
+		$script = preg_replace_callback('/([\t ]+)public function save.*?.*?} catch \(Exception \$e\)/s', array($this, 'modelFilterCallback'), $script);
 		
 		//$script = preg_replace(
+	}
+		
+	public function modelFilterCallback($matches){
+	    $text = $matches[0];
+	    
+	    $ret='return $affectedRows;';
+	    
+	    // "if" for proper handling of \sfMixer and maybe other behaviors
+	    
+	    $afterHooks = <<<EOF
+
+if(\$affectedRows>0 && \$ret){
+    if(\$isInsert) {
+       {$this->getModelHook(array('model.insert.after'))}
+    } else {
+       {$this->getModelHook(array('model.update.after'))}
+    }
+    
+    {$this->getModelHook(array('model.save.after'))}
+}
+
+$ret
+EOF;
+
+        preg_match("/^( +)return .affectedRows/m", $text, $matches);
+        $afterHooks = preg_replace('/^/m', $matches[1], $afterHooks);
+        return str_replace($ret, $afterHooks, $text);
 	}
 	
 	public function queryFilter(&$script)
