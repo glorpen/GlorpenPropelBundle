@@ -28,12 +28,18 @@ use \ModelCriteria;
  */
 class QueryEvent extends Event {
 	private $query;
+	private $con;
 	
-	public function __construct(ModelCriteria $query){
+	public function __construct(ModelCriteria $query, \PropelPDO $con = null){
 		$this->query = $query;
+		$this->con = $con;
 	}
 	
 	public function getQuery(){
 		return $this->query;
+	}
+	
+	public function getConnection(){
+		return $this->con;
 	}
 }

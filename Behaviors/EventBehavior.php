@@ -36,31 +36,31 @@ EOF;
 	
 	public function postDeleteQuery(){
 		return <<<EOF
-EventDispatcherProxy::trigger(array('delete.post','query.delete.post'), new QueryEvent(\$this));
+EventDispatcherProxy::trigger(array('delete.post','query.delete.post'), new QueryEvent(\$this, \$con));
 EOF;
 	}
 
 	public function preSelectQuery(){
 		return <<<EOF
-EventDispatcherProxy::trigger('query.select.pre', new QueryEvent(\$this));
+EventDispatcherProxy::trigger('query.select.pre', new QueryEvent(\$this, \$con));
 EOF;
 	}
 	
 	public function preUpdateQuery(){
 		return <<<EOF
-EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent(\$this));
+EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent(\$this, \$con));
 EOF;
 	}
 
 	public function postUpdateQuery(){
 		return <<<EOF
-EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new QueryEvent(\$this));
+EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new QueryEvent(\$this, \$con));
 EOF;
 	}
 	
 	protected function getModelHook(array $events){
 	    $sEvents = 'array(\''.implode('\',\'', $events).'\')';
-	    return 'EventDispatcherProxy::trigger('.$sEvents.', new ModelEvent($this));';
+	    return 'EventDispatcherProxy::trigger('.$sEvents.', new ModelEvent($this, $con));';
 	}
 	
 	public function objectFilter(&$script){
@@ -81,7 +81,7 @@ EOF;
 		}
 		
 		// fix for SoftDelete - handle preDelete as script filter
-		$script = preg_replace('/(([\t ]+)public function delete.*?try[^{]{)/s', '\1'."\n".'\2\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'model.delete.pre\'), new ModelEvent(\$this));', $script, 1);
+		$script = preg_replace('/(([\t ]+)public function delete.*?try[^{]{)/s', '\1'."\n".'\2\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'model.delete.pre\'), new ModelEvent(\$this, \$con));', $script, 1);
 		
 		// add hooks after successful commit
 		$script = preg_replace_callback('/([\t ]+)public function save.*?.*?} catch \(Exception \$e\)/s', array($this, 'modelFilterCallback'), $script);
@@ -125,7 +125,7 @@ EOF;
 		$script = preg_replace('/(parent::__construct[^}]*)/', '\1'.$rep, $script);
 		
 		// fix for SoftDelete - handle preDelete as script filter
-		$script = preg_replace('/(([\t ]+)protected function basePreDelete.*?{)/s', '\1'."\n".'\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'query.delete.pre\'), new QueryEvent(\$this));', $script, 1);
+		$script = preg_replace('/(([\t ]+)protected function basePreDelete.*?{)/s', '\1'."\n".'\2\2EventDispatcherProxy::trigger(array(\'delete.pre\',\'query.delete.pre\'), new QueryEvent(\$this, \$con));', $script, 1);
 	}
 	
 	public function peerFilter(&$script){
