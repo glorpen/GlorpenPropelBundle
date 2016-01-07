@@ -115,6 +115,8 @@ Available events
 Event class: `ConnectionEvent`
 
 - connection.create
+- connection.begin.pre
+- connection.begin.post
 - connection.commit.pre
 - connection.commit.post
 - connection.rollback.post

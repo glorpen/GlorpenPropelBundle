@@ -12,6 +12,15 @@ use \PropelPDO;
  */
 class EventPropelPDO extends PropelPDO {
 	
+	public function beginTransaction()
+	{
+		$opcount = $this->getNestedTransactionCount();
+		if($opcount === 0) EventDispatcherProxy::trigger('connection.begin.pre', new PropelEvents\ConnectionEvent($this));
+		$ret = parent::beginTransaction();
+		if($ret && $opcount === 0) EventDispatcherProxy::trigger('connection.begin.post', new PropelEvents\ConnectionEvent($this));
+		return $ret;
+	}
+	
 	public function commit(){
 		$opcount = $this->getNestedTransactionCount();
 		if($opcount === 1) EventDispatcherProxy::trigger('connection.commit.pre', new PropelEvents\ConnectionEvent($this));
