@@ -140,6 +140,10 @@ class EventTriggeringTest extends PropelTestCase {
 		$m->save();
 		$this->assertEventTriggered('On model update', $ctx, 1,1,1,1,1,1);
 		
+		$ctx = $this->setUpEventHandlers('model.hydrate.post');
+		$m->reload();
+		$this->assertEventTriggered('On model hydration', $ctx, 1);
+		
 		$ctx = $this->setUpEventHandlers('model.delete.post','model.delete.pre', 'delete.pre', 'delete.post');
 		$m->delete();
 		$this->assertEventTriggered('On model delete', $ctx, 1,1,2,2); // 2,2 for pre/postDelete from Query object

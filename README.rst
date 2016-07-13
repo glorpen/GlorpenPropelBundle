@@ -132,10 +132,11 @@ Event class: `ModelEvent`
 - model.update.pre
 - model.delete.pre
 - model.save.pre
-- model.construct
 - model.update.after
 - model.insert.after
 - model.save.after
+- model.construct
+- model.hydration.post (connection argument is always null)
 
 Events named `model.*.after` are triggered after transaction is commited but before returning from `$model->save()` method.
 

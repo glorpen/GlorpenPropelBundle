@@ -27,6 +27,9 @@ class EventBehavior extends Behavior {
 	public function preSave(){
 	    return $this->getModelHook(array('model.save.pre'));
 	}
+	public function postHydrate(){
+	    return $this->getModelHook(array('model.hydrate.post'), false);
+	}
 	
 	public function preDeleteQuery(){
 		return <<<EOF
@@ -58,9 +61,13 @@ EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new Que
 EOF;
 	}
 	
-	protected function getModelHook(array $events){
+	protected function getModelHook(array $events, $withConnection = true){
 	    $sEvents = 'array(\''.implode('\',\'', $events).'\')';
-	    return 'EventDispatcherProxy::trigger('.$sEvents.', new ModelEvent($this, $con));';
+	    $args = array('$this');
+	    if($withConnection) {
+	        $args[] = '$con';
+	    }
+	    return 'EventDispatcherProxy::trigger('.$sEvents.', new ModelEvent('.implode(', ', $args).'));';
 	}
 	
 	public function objectFilter(&$script){
