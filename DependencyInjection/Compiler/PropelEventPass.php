@@ -17,14 +17,14 @@ class PropelEventPass implements CompilerPassInterface
             return;
         }
         
-		$definition = $container->getDefinition('glorpen.propel.event.dispatcher');
-		
+        $definition = $container->getDefinition('glorpen.propel.event.dispatcher');
+        
         foreach ($container->findTaggedServiceIds('propel.event') as $id => $tags) {
             foreach ($tags as $tag) {
                 if (!empty($tag['method']) && !empty($tag['event'])) {
-                	$definition->addMethodCall('addListenerService', array($tag['event'], array($id, $tag['method'])));
+                    $definition->addMethodCall('addListenerService', array($tag['event'], array($id, $tag['method'])));
                 } else {
-                	$definition->addMethodCall('addSubscriber', array(new Reference($id)));
+                    $definition->addMethodCall('addSubscriber', array(new Reference($id)));
                 }
             }
         }

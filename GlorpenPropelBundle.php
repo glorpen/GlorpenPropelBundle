@@ -34,18 +34,20 @@ use Glorpen\Propel\PropelBundle\DependencyInjection\Compiler\PropelOMPass;
  */
 class GlorpenPropelBundle extends Bundle
 {
-	
-	public function build(ContainerBuilder $container)
-	{
-		$container->addCompilerPass(new PropelEventPass());
-		$container->addCompilerPass(new PropelOMPass());
-	}
-	
-	public function boot()
-	{
-		// set callback in proxy dispatcher,
-		// so it can later get real dispatcher from container
-		EventDispatcherProxy::setDispatcherGetter(array($this->container, 'get'), array('glorpen.propel.event.dispatcher'));
-	}
-	
+    
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new PropelEventPass());
+        $container->addCompilerPass(new PropelOMPass());
+    }
+    
+    public function boot()
+    {
+        // set callback in proxy dispatcher,
+        // so it can later get real dispatcher from container
+        EventDispatcherProxy::setDispatcherGetter(
+            array($this->container, 'get'),
+            array('glorpen.propel.event.dispatcher')
+        );
+    }
 }

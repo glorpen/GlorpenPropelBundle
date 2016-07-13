@@ -25,14 +25,17 @@ use Symfony\Component\EventDispatcher\Event;
  * Event sent form Peer object.
  * @author Arkadiusz Dzięgiel
  */
-class PeerEvent extends Event {
-	private $cls;
-	
-	public function __construct($peerClass){
-		$this->cls = $peerClass;
-	}
-	
-	public function getClass(){
-		return $this->cls;
-	}
+class PeerEvent extends Event
+{
+    private $cls;
+    
+    public function __construct($peerClass)
+    {
+        $this->cls = $peerClass;
+    }
+    
+    public function getClass()
+    {
+        return $this->cls;
+    }
 }

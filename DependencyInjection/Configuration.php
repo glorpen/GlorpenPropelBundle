@@ -15,15 +15,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
         ->children()
-        	->arrayNode("extended_models")
-        		->defaultValue(array())
-        		->useAttributeAsKey('key')
-        		->prototype('scalar')->end()
-        	->end()
+            ->arrayNode("extended_models")
+                ->defaultValue(array())
+                ->useAttributeAsKey('key')
+                ->prototype('scalar')->end()
+            ->end()
         ->end()
         ;
         
         return $treeBuilder;
     }
-
 }

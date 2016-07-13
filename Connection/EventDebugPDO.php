@@ -6,8 +6,8 @@ namespace Glorpen\Propel\PropelBundle\Connection;
  * Can trigger connection.commit and connection.rollback events.
  * @author Arkadiusz Dzięgiel
  */
-class EventDebugPDO extends EventPropelPDO {
-	
-	public $useDebug = true;
-	
+class EventDebugPDO extends EventPropelPDO
+{
+    
+    public $useDebug = true;
 }

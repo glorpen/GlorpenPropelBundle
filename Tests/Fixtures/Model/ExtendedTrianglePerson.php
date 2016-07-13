@@ -1,5 +1,6 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Tests\Fixtures\Model;
 
-class ExtendedTrianglePerson extends TrianglePerson {
+class ExtendedTrianglePerson extends TrianglePerson
+{
 }

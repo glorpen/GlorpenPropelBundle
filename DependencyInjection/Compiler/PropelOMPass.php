@@ -15,7 +15,7 @@ class PropelOMPass implements CompilerPassInterface
             return;
         }
         
-		$definition = $container->getDefinition('glorpen.propel.listeners.om_overrider');
+        $definition = $container->getDefinition('glorpen.propel.listeners.om_overrider');
 
         foreach ($container->findTaggedServiceIds('propel.om') as $id => $tags) {
             $definition->addMethodCall('addProvider', array(new Reference($id)));

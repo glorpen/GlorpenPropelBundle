@@ -6,3 +6,6 @@ framework:
     test: ~
     session:
         storage_id: session.storage.mock_file
+propel:
+  path: "%kernel.root_dir%/../../vendor/propel/propel1"
+  phing_path: "%kernel.root_dir%/../../vendor/phing/phing"

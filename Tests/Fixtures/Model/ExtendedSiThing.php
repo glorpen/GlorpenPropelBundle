@@ -1,5 +1,6 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Tests\Fixtures\Model;
 
-class ExtendedSiThing extends SiThing {
+class ExtendedSiThing extends SiThing
+{
 }

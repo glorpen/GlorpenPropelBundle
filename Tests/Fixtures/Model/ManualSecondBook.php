@@ -1,5 +1,6 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Tests\Fixtures\Model;
 
-class ManualSecondBook extends Book {
+class ManualSecondBook extends Book
+{
 }

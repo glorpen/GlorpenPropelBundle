@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\om\BaseBook;
 
-class ExtendedBook extends Book {
-	
+class ExtendedBook extends Book
+{
+    
 }

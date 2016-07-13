@@ -26,20 +26,24 @@ use \BaseObject;
  * Event sent form Model object.
  * @author Arkadiusz Dzięgiel
  */
-class ModelEvent extends Event {
-	private $model;
-	private $con;
-	
-	public function __construct(BaseObject $model, \PropelPDO $con = null){
-		$this->model = $model;
-		$this->con = $con;
-	}
-	
-	public function getModel(){
-		return $this->model;
-	}
-	
-	public function getConnection(){
-		return $this->con;
-	}
+class ModelEvent extends Event
+{
+    private $model;
+    private $con;
+    
+    public function __construct(BaseObject $model, \PropelPDO $con = null)
+    {
+        $this->model = $model;
+        $this->con = $con;
+    }
+    
+    public function getModel()
+    {
+        return $this->model;
+    }
+    
+    public function getConnection()
+    {
+        return $this->con;
+    }
 }
