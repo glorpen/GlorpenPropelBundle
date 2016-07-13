@@ -13,7 +13,8 @@ class ClassEventDispatcherTest extends \PHPUnit_Framework_TestCase implements Ev
 {
     public function testListeners()
     {
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMockForAbstractClass();
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
+            ->getMockForAbstractClass();
         $dispatcher = new ClassEventDispatcher($container);
         
         $container->method('get')->withConsecutive(array('testId1',1), array('testId2', 1))->willReturn($this);
