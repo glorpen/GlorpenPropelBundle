@@ -96,7 +96,7 @@ And in *config_dev.yml*:
 Listening for propel hooks
 --------------------------
 
-- register listener
+With subscriber:
 
 .. sourcecode:: xml
 
@@ -104,10 +104,25 @@ Listening for propel hooks
 		<argument type="service" id="security.context" />
 		<tag name="propel.event" />
 	</service>
+
+With listener:
+
+.. sourcecode:: xml
 	
 	<service id="my.listener" class="SomeBundle\Listeners\HistoryBehaviorListener">
-		<tag name="propel.event" method="onPropelEventSave" event="model.save.post" />
+		<tag name="propel.event" method="onPropelEventSave" event="model.save.post" priority="0" />
 	</service>
+
+The `priority` attribute is optional.
+
+In both cases you can narrow receiving events to given class with `class` attribute:
+
+.. sourcecode:: xml
+   
+   <service id="my.listener" class="SomeBundle\Listeners\HistoryBehaviorListener">
+      <tag name="propel.event" method="onPropelEventSave" event="model.save.post" class="SomeBundle\Model\Example" />
+   </service>
+
 
 Available events
 ----------------
@@ -153,7 +168,7 @@ Event class: `QueryEvent`
 
 Event class: `PeerEvent`
 
-- construct
+- peer.construct
 
 Will be called on model/query/peer construct/delete/update/etc
 
