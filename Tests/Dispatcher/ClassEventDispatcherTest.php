@@ -29,7 +29,10 @@ class ClassEventDispatcherTest extends \PHPUnit_Framework_TestCase implements Ev
         $this->assertContains(array($this, 'subscriberMethod'), $d->getListeners('subscriberEvent'));
         
         $dispatcher->addSubscriberService('testClass2', 'testId2', get_class($this));
-        $this->assertContains(array($this, 'subscriberMethod'), $dispatcher->get('testClass2')->getListeners('subscriberEvent'));
+        $this->assertContains(
+            array($this, 'subscriberMethod'),
+            $dispatcher->get('testClass2')->getListeners('subscriberEvent')
+        );
     }
     
     public static function getSubscribedEvents()

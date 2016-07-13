@@ -19,7 +19,8 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
     protected function assertClassEvent($event, $eventName, $class)
     {
         $container = $this->getMockBuilder(ContainerInterface::class)->getMockForAbstractClass();
-        $genericDispatcher = $this->getMockBuilder(ContainerAwareEventDispatcher::class)->disableOriginalConstructor()->getMock();
+        $genericDispatcher = $this->getMockBuilder(ContainerAwareEventDispatcher::class)
+            ->disableOriginalConstructor()->getMock();
         $classDispatcher = $this->getMockBuilder(ClassEventDispatcher::class)->disableOriginalConstructor()->getMock();
         
         $genericDispatcher->expects($this->once())->method('dispatch')->with($eventName, $event);
