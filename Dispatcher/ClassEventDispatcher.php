@@ -3,7 +3,6 @@ namespace Glorpen\Propel\PropelBundle\Dispatcher;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 /**
  * @author Arkadiusz Dzięgiel <arkadiusz.dziegiel@glorpen.pl>
@@ -12,7 +11,7 @@ class ClassEventDispatcher
 {
     protected $dispatchers = array();
     protected $container;
-    protected $dispatcherClass = ContainerAwareEventDispatcher::class;
+    protected $dispatcherClass = 'Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher';
     
     public function __construct(ContainerInterface $container)
     {
