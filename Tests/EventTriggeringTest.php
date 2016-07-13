@@ -39,6 +39,8 @@ use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookPeer;
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SoftdeleteTable;
 
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\om\BaseSoftdeleteTableQuery;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcher;
+use Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher;
 
 /**
  * @author Arkadiusz Dzięgiel
@@ -87,7 +89,7 @@ class EventTriggeringTest extends PropelTestCase
         
         EventDispatcherProxy::setDispatcherGetter(function () use ($that, &$triggered, $events) {
             $c = $that->getContainer();
-            $d = new ContainerAwareEventDispatcher($c);
+            $d = new EventDispatcher($c, new ClassEventDispatcher($c));
             
             foreach ($events as $e) {
                 if ($e instanceof EventSubscriberInterface) {
@@ -130,7 +132,7 @@ class EventTriggeringTest extends PropelTestCase
         $this->assertEventTriggered('After model update', $ctx, 1, 1);
     }
     
-    public function testEventsTriggering()
+    public function testModelEventsTriggering()
     {
         
         //model
@@ -162,9 +164,11 @@ class EventTriggeringTest extends PropelTestCase
         $ctx = $this->setUpEventHandlers('model.delete.post', 'model.delete.pre', 'delete.pre', 'delete.post');
         $m->delete();
         $this->assertEventTriggered('On model delete', $ctx, 1, 1, 2, 2); // 2,2 for pre/postDelete from Query object
-        
+    }
+    
+    public function testQueryEventsTriggering()
+    {
         //query
-        
         $ctx = $this->setUpEventHandlers('construct', 'query.construct');
         $q = new BookQuery();
         $this->assertEventTriggered('On new query construct', $ctx, 1, 1);
@@ -180,9 +184,11 @@ class EventTriggeringTest extends PropelTestCase
         $ctx = $this->setUpEventHandlers('query.select.pre');
         $q->find();
         $this->assertEventTriggered('On query select', $ctx, 1);
-        
+    }
+    
+    public function testConnectionEventsTriggering()
+    {
         //connection
-        
         $ctx = $this->setUpEventHandlers('connection.create');
         $con = new EventPropelPDO("sqlite::memory:");
         $this->assertEventTriggered('On connection create', $ctx, 1);

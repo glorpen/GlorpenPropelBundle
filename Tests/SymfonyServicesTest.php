@@ -35,6 +35,6 @@ class SymfonyServicesTest extends WebTestCase
     
     protected static function getKernelClass()
     {
-        return 'Glorpen\Propel\PropelBundle\Tests\Fixtures\TestKernel';
+        return 'Glorpen\Propel\PropelBundle\Tests\TestKernel';
     }
 }
