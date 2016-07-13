@@ -5,7 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="glorpen.propel.event.dispatcher.class">Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher</parameter>
+        <parameter key="glorpen.propel.event.dispatcher.class">Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcher</parameter>
+        <parameter key="glorpen.propel.event.class_dispatcher.class">Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher</parameter>
         <parameter key="glorpen.propel.listeners.om_overrider.class">Glorpen\Propel\PropelBundle\Services\OMClassOverrider</parameter>
         <parameter key="glorpen.propel.listeners.container_aware.class">Glorpen\Propel\PropelBundle\Services\ContainerAwareModel</parameter>
         <parameter key="glorpen.propel.listeners.transaction_aware.class">Glorpen\Propel\PropelBundle\Services\TransactionLifeCycle</parameter>
@@ -15,18 +16,27 @@
     <services>
 		<service id="glorpen.propel.event.dispatcher" class="%glorpen.propel.event.dispatcher.class%">
             <argument type="service" id="service_container" />
+            <argument type="service" id="glorpen.propel.event.class_dispatcher" />
         </service>
+        
+        <service id="glorpen.propel.event.class_dispatcher" class="%glorpen.propel.event.class_dispatcher.class%">
+        	<argument type="service" id="service_container" />
+        </service>
+        
         <service id="glorpen.propel.listeners.om_overrider" class="%glorpen.propel.listeners.om_overrider.class%">
         	<tag name="propel.event" method="onDetectionRequest" event="om.detect" />
         </service>
+        
         <service id="glorpen.propel.listeners.container_aware" class="%glorpen.propel.listeners.container_aware.class%">
         	<argument type="service" id="service_container" />
         	<tag name="propel.event" method="onModelConstruct" event="model.construct" />
         	<tag name="propel.event" method="onQueryConstruct" event="query.construct" />
         </service>
+        
         <service id="glorpen.propel.listeners.transaction_aware" class="%glorpen.propel.listeners.transaction_aware.class%">
         	<tag name="propel.event" />
         </service>
+        
         <service id="glorpen.propel.class_finder" class="%glorpen.propel.class_finder.class%" />
     </services>
 </container>

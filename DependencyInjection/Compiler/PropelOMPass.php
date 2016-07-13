@@ -5,8 +5,10 @@ namespace Glorpen\Propel\PropelBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
+/**
+ * @author Arkadiusz Dzięgiel <arkadiusz.dziegiel@glorpen.pl>
+ */
 class PropelOMPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
