@@ -21,7 +21,6 @@ class SymfonyServicesTest extends WebTestCase
     
     public function setUp()
     {
-        
     }
 
     public function testSomething()
