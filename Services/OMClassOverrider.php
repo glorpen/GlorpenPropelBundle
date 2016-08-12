@@ -3,9 +3,6 @@
 namespace Glorpen\Propel\PropelBundle\Services;
 
 use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
-
-use Glorpen\Propel\PropelBundle\Events\PeerEvent;
-
 use Glorpen\Propel\PropelBundle\Provider\OMClassProvider;
 
 /**
@@ -61,6 +58,7 @@ class OMClassOverrider
      */
     public function getExtendedClass($class)
     {
+        $ret = null;
         if (array_key_exists($class, $this->dynamicClasses)) {
             $ret = $this->dynamicClasses[$class];
         }
