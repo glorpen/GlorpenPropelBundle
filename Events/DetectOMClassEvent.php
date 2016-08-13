@@ -14,7 +14,7 @@ class DetectOMClassEvent extends Event
     private $row;
     private $col;
     
-    public function __construct($cls, $row, $col)
+    public function __construct($cls, $row = null, $col = null)
     {
         $this->cls = $cls;
         $this->row = $row;
