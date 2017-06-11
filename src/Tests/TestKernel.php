@@ -29,4 +29,9 @@ class TestKernel extends Kernel
     {
         $loader->load(realpath(__DIR__.'/Resources/config').'/config_'.$this->getEnvironment().'.yml');
     }
+    
+    public function getRootDir()
+    {
+        return realpath(__DIR__.'/../..').'/test-app';
+    }
 }

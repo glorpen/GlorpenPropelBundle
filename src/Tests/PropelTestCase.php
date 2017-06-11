@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class PropelTestCase extends TestCase
 {
     
-    static protected $root = __DIR__;
+    static protected $root = __DIR__.'/../..';
     
     static protected $schema = <<<SCHEMA
 <database name="books" defaultIdMethod="native" namespace="Glorpen\\Propel\\PropelBundle\\Tests\\Fixtures\\Model">
@@ -59,7 +59,7 @@ SCHEMA;
     
     public static function setUpBeforeClass()
     {
-        if (!file_exists($file = static::$root . '/../vendor/propel/propel1/runtime/lib/Propel.php')) {
+        if (!file_exists($file = static::$root . '/vendor/propel/propel1/runtime/lib/Propel.php')) {
             self::markTestSkipped('Propel is not available.');
         }
     
@@ -71,17 +71,17 @@ SCHEMA;
     {
         return new ContainerBuilder(new ParameterBag(array(
                 'kernel.debug'      => false,
-                'kernel.root_dir'   => static::$root . '/../',
+                'kernel.root_dir'   => static::$root . '/test-app',
         )));
     }
     
     protected function loadPropelQuickBuilder()
     {
-        require_once static::$root . '/../vendor/propel/propel1/runtime/lib/Propel.php';
-        require_once static::$root . '/../vendor/propel/propel1/runtime/lib/adapter/DBAdapter.php';
-        require_once static::$root . '/../vendor/propel/propel1/runtime/lib/adapter/DBSQLite.php';
-        require_once static::$root . '/../vendor/propel/propel1/runtime/lib/connection/PropelPDO.php';
-        require_once static::$root . '/../vendor/propel/propel1/generator/lib/util/PropelQuickBuilder.php';
+        require_once static::$root . '/vendor/propel/propel1/runtime/lib/Propel.php';
+        require_once static::$root . '/vendor/propel/propel1/runtime/lib/adapter/DBAdapter.php';
+        require_once static::$root . '/vendor/propel/propel1/runtime/lib/adapter/DBSQLite.php';
+        require_once static::$root . '/vendor/propel/propel1/runtime/lib/connection/PropelPDO.php';
+        require_once static::$root . '/vendor/propel/propel1/generator/lib/util/PropelQuickBuilder.php';
     }
     
     protected $builder;
@@ -93,8 +93,8 @@ SCHEMA;
         if (!class_exists('Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book', false)) {
             $builder = new \PropelQuickBuilder();
             
-            $builder->getConfig()->setBuildProperty('behaviorEventClass', 'Behaviors.EventBehavior');
-            $builder->getConfig()->setBuildProperty('behaviorExtendClass', 'Behaviors.ExtendBehavior');
+            $builder->getConfig()->setBuildProperty('behaviorEventClass', 'src.Behaviors.EventBehavior');
+            $builder->getConfig()->setBuildProperty('behaviorExtendClass', 'src.Behaviors.ExtendBehavior');
                 
             $builder->setSchema(static::$schema);
             $builder->setClassTargets(array('tablemap', 'peer', 'object', 'query', 'peerstub', 'querystub'));
