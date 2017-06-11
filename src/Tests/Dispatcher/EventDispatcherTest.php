@@ -29,11 +29,15 @@ class EventDispatcherTest extends TestCase
         $genericDispatcher->expects($this->once())->method('dispatch')->with($eventName, $event);
         $classDispatcher->expects($this->once())->method('get')->with($class)->willReturn($genericDispatcher);
         
-        $dispatcher = new EventDispatcher($container, $classDispatcher);
+        $dispatcher = new EventDispatcher($classDispatcher);
+        $dispatcher->setContainer($container);
         
         $dispatcher->dispatch($eventName, $event);
     }
     
+    /**
+     * @group asd
+     */
     public function testClassEvents()
     {
         $modelEvent = $this->getMockBuilder('Glorpen\Propel\PropelBundle\Events\ModelEvent')

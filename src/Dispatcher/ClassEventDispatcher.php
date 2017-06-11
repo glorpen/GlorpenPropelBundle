@@ -3,6 +3,7 @@ namespace Glorpen\Propel\PropelBundle\Dispatcher;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * @author Arkadiusz Dzięgiel <arkadiusz.dziegiel@glorpen.pl>
@@ -11,9 +12,9 @@ class ClassEventDispatcher
 {
     protected $dispatchers = array();
     protected $container;
-    protected $dispatcherClass = 'Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher';
+    protected $dispatcherClass = 'Glorpen\Propel\PropelBundle\Dispatcher\CompatEventDispatcher';
     
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
@@ -21,6 +22,19 @@ class ClassEventDispatcher
     public function setDispatcherClass($dispatcherClass)
     {
         $this->dispatcherClass = $dispatcherClass;
+    }
+    
+    protected function isServiceInjectionSupported()
+    {
+        $r = new \ReflectionClass($this->dispatcherClass);
+        return $r->hasMethod('addListenerService') && $r->hasMethod('addSubscriberService');
+    }
+    
+    protected function assertServiceInjectionSupport()
+    {
+        if (!$this->isServiceInjectionSupported()) {
+            throw new \RuntimeException(sprintf('Service injection is not supported for %s', $this->dispatcherClass));
+        }
     }
     
     /**
@@ -31,7 +45,11 @@ class ClassEventDispatcher
     {
         if (!array_key_exists($class, $this->dispatchers)) {
             $cls = $this->dispatcherClass;
-            $this->dispatchers[$class] = new $cls($this->container);
+            $dispatcher = new $cls();
+            if ($dispatcher instanceof ContainerAwareInterface) {
+                $dispatcher->setContainer($this->container);
+            }
+            $this->dispatchers[$class] = $dispatcher;
         }
         
         return $this->dispatchers[$class];
@@ -42,18 +60,20 @@ class ClassEventDispatcher
         $this->get($class)->addListener($eventName, $listener, $priority);
     }
     
-    public function addListenerService($class, $eventName, $callback, $priority = 0)
-    {
-        $this->get($class)->addListenerService($eventName, $callback, $priority);
-    }
-    
     public function addSubscriber($class, EventSubscriberInterface $subscriber)
     {
         $this->get($class)->addSubscriber($subscriber);
     }
     
+    public function addListenerService($class, $eventName, $callback, $priority = 0)
+    {
+        $this->assertServiceInjectionSupport();
+        return $this->get($class)->addListenerService($eventName, $callback, $priority);
+    }
+    
     public function addSubscriberService($class, $serviceId, $subscriberClass)
     {
-        $this->get($class)->addSubscriberService($serviceId, $subscriberClass);
+        $this->assertServiceInjectionSupport();
+        return $this->get($class)->addSubscriberService($serviceId, $subscriberClass);
     }
 }

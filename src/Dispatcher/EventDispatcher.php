@@ -7,18 +7,18 @@ use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * @author Arkadiusz Dzięgiel <arkadiusz.dziegiel@glorpen.pl>
  */
-class EventDispatcher extends ContainerAwareEventDispatcher
+class EventDispatcher extends CompatEventDispatcher
 {
     
     protected $classDispatcher;
     
-    public function __construct(ContainerInterface $container, ClassEventDispatcher $classDispatcher)
+    public function __construct(ClassEventDispatcher $classDispatcher)
     {
-        parent::__construct($container);
         $this->classDispatcher = $classDispatcher;
     }
     
