@@ -14,10 +14,10 @@ Official repositories
 For forking and other funnies
 
 
-BitBucket: https://bitbucket.org/glorpen/glorpenpropelbundle - main repo
+GitHub: https://github.com/glorpen/GlorpenPropelBundle - main repo
 
 
-GitHub: https://github.com/glorpen/GlorpenPropelBundle
+BitBucket: https://bitbucket.org/glorpen/glorpenpropelbundle
 
 
 How to install
