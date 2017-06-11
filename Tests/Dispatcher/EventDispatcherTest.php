@@ -9,11 +9,12 @@ use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use Glorpen\Propel\PropelBundle\Events\PeerEvent;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Arkadiusz Dzięgiel
  */
-class EventDispatcherTest extends \PHPUnit_Framework_TestCase
+class EventDispatcherTest extends TestCase
 {
     
     protected function assertClassEvent($event, $eventName, $class)

@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Propel\PropelBundle\Tests\TestCase;
 use Symfony\Component\Yaml\Yaml;
+use PHPUnit\Framework\TestCase;
 
 class PropelTestCase extends TestCase
 {

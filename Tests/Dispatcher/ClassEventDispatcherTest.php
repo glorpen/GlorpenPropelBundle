@@ -5,11 +5,12 @@ namespace Glorpen\Propel\PropelBundle\Tests;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Arkadiusz Dzięgiel
  */
-class ClassEventDispatcherTest extends \PHPUnit_Framework_TestCase implements EventSubscriberInterface
+class ClassEventDispatcherTest extends TestCase implements EventSubscriberInterface
 {
     public function testListeners()
     {

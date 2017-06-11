@@ -8,7 +8,7 @@
         "propel/propel-bundle": "1.*,1.6.x-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "<6.0",
+        "phpunit/phpunit": ">=6.0",
         "squizlabs/php_codesniffer": "*"
     },
     "authors": [

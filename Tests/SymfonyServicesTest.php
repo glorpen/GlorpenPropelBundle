@@ -29,7 +29,7 @@ class SymfonyServicesTest extends WebTestCase
         $kernel->boot();
         $c = $kernel->getContainer();
         
-        $c->get('glorpen.propel.event.dispatcher');
+        $this->assertNotNull($c->get('glorpen.propel.event.dispatcher'));
     }
     
     protected static function getKernelClass()
