@@ -4,13 +4,12 @@
     "type": "symfony-bundle",
     "license": "GPL-3.0",
     "require": {
-        "symfony/symfony": ">=2.3,<4.0",
-        "propel/propel-bundle": "1.*"
+    	"symfony/symfony": ">=2.3,<4.0",
+        "propel/propel-bundle": "1.*,1.6.x-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "squizlabs/php_codesniffer": "*",
-        "propel/propel-bundle": ">=1.4.4"
+        "phpunit/phpunit": "<6.0",
+        "squizlabs/php_codesniffer": "*"
     },
     "authors": [
         {
