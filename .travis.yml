@@ -5,9 +5,19 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
+
+env:
+  - SYMFONY_VERSION="^2.3" PROPEL_VERSION="1.*"
+  - SYMFONY_VERSION="^2.4" PROPEL_VERSION="1.*"
+  - SYMFONY_VERSION="^2.7" PROPEL_VERSION="1.*"
+  - SYMFONY_VERSION="^2.8" PROPEL_VERSION="1.*"
+  - SYMFONY_VERSION="^3.2" PROPEL_VERSION="1.6.x-dev"
+  - SYMFONY_VERSION="^3.3" PROPEL_VERSION="1.6.x-dev"
+  - SYMFONY_VERSION="^4.0" PROPEL_VERSION="1.6.x-dev"
 
 before_script:
-  - composer --dev install
+  - composer require symfony/symfony:${SYMFONY_VERSION} propel/propel-bundle:${PROPEL_VERSION}
 
 script:
   - vendor/bin/phpunit
