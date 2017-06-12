@@ -35,9 +35,6 @@ class EventDispatcherTest extends TestCase
         $dispatcher->dispatch($eventName, $event);
     }
     
-    /**
-     * @group asd
-     */
     public function testClassEvents()
     {
         $modelEvent = $this->getMockBuilder('Glorpen\Propel\PropelBundle\Events\ModelEvent')

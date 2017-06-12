@@ -28,9 +28,9 @@ class CompatEventDispatcher extends SymfonyEventDispatcher implements ContainerA
     
     protected function getClosure($serviceId, $method)
     {
-        return function() use ($serviceId, $method) {
+        return function($event) use ($serviceId, $method) {
             $service = $this->container->get($serviceId);
-            return call_user_func(array($service, $method));
+            return call_user_func(array($service, $method), $event);
         };
     }
     
