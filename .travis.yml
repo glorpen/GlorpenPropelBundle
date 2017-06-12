@@ -1,7 +1,7 @@
 language: php
 
 before_script:
-  - composer require symfony/symfony:${SYMFONY_VERSION} propel/propel-bundle:${PROPEL_VERSION}
+  - composer require "symfony/symfony:${SYMFONY_VERSION}" "propel/propel-bundle:${PROPEL_VERSION:-1.*}" symfony/framework-bundle:"${FRAMEWORK_VERSION:-*}"
 
 script:
   - vendor/bin/phpunit
@@ -10,18 +10,20 @@ script:
 matrix:
   include:
     - php: 5.4
-      env: SYMFONY_VERSION="^2.3" PROPEL_VERSION="1.*"
+      env: SYMFONY_VERSION="^2.3"
     - php: 5.5
-      env: SYMFONY_VERSION="^2.4" PROPEL_VERSION="1.*"
+      env: SYMFONY_VERSION="^2.4"
     - php: 5.6
-      env: SYMFONY_VERSION="^2.7" PROPEL_VERSION="1.*"
+      env: SYMFONY_VERSION="^2.7"
     - php: 5.6
-      env: SYMFONY_VERSION="^2.8" PROPEL_VERSION="1.*"
+      env: SYMFONY_VERSION="^2.8"
     - php: 7.0
-      env: SYMFONY_VERSION="^2.8" PROPEL_VERSION="1.*"
+      env: SYMFONY_VERSION="^2.8"
     - php: 7.0
       env: SYMFONY_VERSION="^3.2" PROPEL_VERSION="1.6.x-dev"
     - php: 7.0
       env: SYMFONY_VERSION="^3.3" PROPEL_VERSION="1.6.x-dev"
     - php: 7.1
       env: SYMFONY_VERSION="^3.3" PROPEL_VERSION="1.6.x-dev"
+    - php: 7.1
+      env: SYMFONY_VERSION="4.0.x-dev as 3.99" PROPEL_VERSION="1.6.x-dev" FRAMEWORK_VERSION="4.0.x-dev as 3.99"
