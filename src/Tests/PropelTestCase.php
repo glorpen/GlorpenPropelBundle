@@ -2,20 +2,22 @@
 namespace Glorpen\Propel\PropelBundle\Tests;
 
 use Glorpen\Propel\PropelBundle\Connection\EventPropelPDO;
-
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Symfony\Component\Yaml\Yaml;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Arkadiusz Dzięgiel <arkadiusz.dziegiel@glorpen.pl>
+ */
 class PropelTestCase extends TestCase
 {
     
-    static protected $root = __DIR__.'/../..';
+    protected static function getRoot()
+    {
+        return __DIR__ . '/../..';
+    }
     
-    static protected $schema = <<<SCHEMA
+    protected static $schema = <<<SCHEMA
 <database name="books" defaultIdMethod="native" namespace="Glorpen\\Propel\\PropelBundle\\Tests\\Fixtures\\Model">
     <table name="book">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
@@ -59,7 +61,7 @@ SCHEMA;
     
     public static function setUpBeforeClass()
     {
-        if (!file_exists($file = static::$root . '/vendor/propel/propel1/runtime/lib/Propel.php')) {
+        if (!file_exists($file = static::getRoot() . '/vendor/propel/propel1/runtime/lib/Propel.php')) {
             self::markTestSkipped('Propel is not available.');
         }
     
@@ -71,17 +73,17 @@ SCHEMA;
     {
         return new ContainerBuilder(new ParameterBag(array(
                 'kernel.debug'      => false,
-                'kernel.root_dir'   => static::$root . '/test-app',
+                'kernel.root_dir'   => static::getRoot() . '/test-app',
         )));
     }
     
     protected function loadPropelQuickBuilder()
     {
-        require_once static::$root . '/vendor/propel/propel1/runtime/lib/Propel.php';
-        require_once static::$root . '/vendor/propel/propel1/runtime/lib/adapter/DBAdapter.php';
-        require_once static::$root . '/vendor/propel/propel1/runtime/lib/adapter/DBSQLite.php';
-        require_once static::$root . '/vendor/propel/propel1/runtime/lib/connection/PropelPDO.php';
-        require_once static::$root . '/vendor/propel/propel1/generator/lib/util/PropelQuickBuilder.php';
+        require_once static::getRoot() . '/vendor/propel/propel1/runtime/lib/Propel.php';
+        require_once static::getRoot() . '/vendor/propel/propel1/runtime/lib/adapter/DBAdapter.php';
+        require_once static::getRoot() . '/vendor/propel/propel1/runtime/lib/adapter/DBSQLite.php';
+        require_once static::getRoot() . '/vendor/propel/propel1/runtime/lib/connection/PropelPDO.php';
+        require_once static::getRoot() . '/vendor/propel/propel1/generator/lib/util/PropelQuickBuilder.php';
     }
     
     protected $builder;

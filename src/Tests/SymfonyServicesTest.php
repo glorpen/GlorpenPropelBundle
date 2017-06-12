@@ -54,42 +54,50 @@ class SymfonyServicesTest extends WebTestCase
         return $c;
     }
     
+    public function builderForTestServiceWiring(ContainerBuilder $c)
+    {
+        $def = $c->register('test.events1', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
+    }
     
     public function testServiceWiring()
     {
-        $c = $this->prepareEventTester(function(ContainerBuilder $c){
-            $def = $c->register('test.events1', EventTester::class);
-            $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
-        });
+        $c = $this->prepareEventTester(array($this, 'builderForTestServiceWiring'));
         
         $this->assertNotNull($c->get('test.events1')->handledEvent, 'Event was handled');
     }
     
-    public function testPublicCirruralDependencies()
+    public function builderForTestPublicCircuralDependencies(ContainerBuilder $c)
     {
-        $c = $this->prepareEventTester(function(ContainerBuilder $c){
-            $def = $c->register('test.events1', EventTester::class);
-            $def->addArgument(new Reference('glorpen.propel.event.dispatcher'));
-            $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
-        });
+        $def = $c->register('test.events1', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->addArgument(new Reference('glorpen.propel.event.dispatcher'));
+        $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
+    }
+    
+    public function testPublicCircuralDependencies()
+    {
+        $c = $this->prepareEventTester(array($this, 'builderForTestPublicCircuralDependencies'));
         
         $te = $c->get('test.events1');
         $this->assertNotNull($te->arg1, 'EventDispatcher was injected');
         $this->assertNotNull($te->handledEvent, 'Event was handled');
     }
     
-    public function testPrivateCirruralDependencies()
+    public function builderForTestPrivateCircuralDependencies(ContainerBuilder $c)
     {
-        $c = $this->prepareEventTester(function(ContainerBuilder $c){
-            $def = $c->register('test.events1', EventTester::class);
-            /* @var $def \Symfony\Component\DependencyInjection\Definition */
-            $def->setPublic(false);
-            $def->addArgument(new Reference('glorpen.propel.event.dispatcher'));
-            $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
-            
-            $def = $c->register('test.events_tracker', EventTester::class);
-            $def->addArgument(new Reference('test.events1'));
-        });
+        $def = $c->register('test.events1', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        /* @var $def \Symfony\Component\DependencyInjection\Definition */
+        $def->setPublic(false);
+        $def->addArgument(new Reference('glorpen.propel.event.dispatcher'));
+        $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
+        
+        $def = $c->register('test.events_tracker', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->addArgument(new Reference('test.events1'));
+    }
+    
+    public function testPrivateCircuralDependencies()
+    {
+        $c = $this->prepareEventTester(array($this, 'builderForTestPrivateCircuralDependencies'));
         
         $te = $c->get('test.events_tracker')->arg1;
             

@@ -16,10 +16,10 @@
             "name": "Arkadiusz Dzięgiel"
         }
     ],
-    "target-dir": "Glorpen/Propel/PropelBundle",
     "autoload": {
         "psr-4": {
             "Glorpen\\Propel\\PropelBundle\\": "src/"
-        }
+        },
+        "exclude-from-classmap": [ "/src/Tests" ]
     }
 }

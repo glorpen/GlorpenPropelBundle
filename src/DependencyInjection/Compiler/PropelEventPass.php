@@ -24,7 +24,6 @@ class PropelEventPass implements CompilerPassInterface
         $classDefinition = $container->getDefinition('glorpen.propel.event.class_dispatcher');
         
         foreach ($container->findTaggedServiceIds('propel.event') as $id => $tags) {
-            
             foreach ($tags as $tag) {
                 $isListener = !empty($tag['method']) && !empty($tag['event']);
                 $isClass = !empty($tag['class']);
