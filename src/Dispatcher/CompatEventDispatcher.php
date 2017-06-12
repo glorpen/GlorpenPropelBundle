@@ -34,6 +34,14 @@ class CompatEventDispatcher extends SymfonyEventDispatcher implements ContainerA
         };
     }
     
+    /**
+     * Adds listener from given service ID by wrapping it with closure.
+     * @param string $eventName
+     * @param unknown $callback
+     * @param number $priority
+     * @throws \InvalidArgumentException
+     * @return \Closure Real listener
+     */
     public function addListenerService($eventName, $callback, $priority = 0)
     {
         $this->assertContainer();
@@ -50,6 +58,12 @@ class CompatEventDispatcher extends SymfonyEventDispatcher implements ContainerA
         return $closure;
     }
     
+    /**
+     * Adds subsriber from given service ID by wrapping listeners with closures.
+     * @param string $serviceId
+     * @param string $class
+     * @return \Closure[] Real listeners
+     */
     public function addSubscriberService($serviceId, $class)
     {
         $closures = array();
