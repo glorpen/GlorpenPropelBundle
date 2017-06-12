@@ -63,7 +63,7 @@ class EventTriggeringTest extends PropelTestCase
         
         EventDispatcherProxy::setDispatcherGetter(function () use ($that) {
             $c = $that->getContainer();
-            $d = new \Symfony\Component\EventDispatcher\EventDispatcher($c);
+            $d = new \Symfony\Component\EventDispatcher\EventDispatcher();
             
             $d->addListener('model.construct', array(new ContainerAwareModel($c), 'onModelConstruct'));
             
@@ -88,9 +88,7 @@ class EventTriggeringTest extends PropelTestCase
         $that = $this;
         
         EventDispatcherProxy::setDispatcherGetter(function () use ($that, &$triggered, $events) {
-            $c = $that->getContainer();
-            $d = new EventDispatcher(new ClassEventDispatcher($c));
-            $d->setContainer($c);
+            $d = new EventDispatcher(new ClassEventDispatcher());
             
             foreach ($events as $e) {
                 if ($e instanceof EventSubscriberInterface) {

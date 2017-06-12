@@ -7,8 +7,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Glorpen\Propel\PropelBundle\DependencyInjection\Compiler\PropelEventPass;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Arkadiusz Dzięgiel
@@ -27,24 +25,12 @@ class GlorpenPropelExtension extends Extension
         $loader->load('services.xml');
         
         $this->setupOverrider($config, $container);
-        $this->setupEventDispatchers($container);
     }
     
     protected function setupOverrider(array $config, ContainerBuilder $container)
     {
         $container->getDefinition("glorpen.propel.listeners.om_overrider")
             ->addArgument($config['extended_models']);
-    }
-    
-    protected function setupEventDispatchers(ContainerBuilder $container)
-    {
-        $mainDispatcher = $container->getDefinition('glorpen.propel.event.dispatcher');
-        $classDispatcher = $container->getDefinition('glorpen.propel.event.class_dispatcher');
-        
-        if (!PropelEventPass::isClosureSupported()) {
-            $classDispatcher->addArgument(new Reference('service_container'));
-            $mainDispatcher->addMethodCall('setContainer', array(new Reference('service_container')));
-        }
     }
     
     public function getAlias()

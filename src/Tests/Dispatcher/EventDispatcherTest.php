@@ -19,8 +19,6 @@ class EventDispatcherTest extends TestCase
     
     protected function assertClassEvent($event, $eventName, $class)
     {
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
-            ->getMockForAbstractClass();
         $genericDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher')
             ->disableOriginalConstructor()->getMock();
         $classDispatcher = $this->getMockBuilder('Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher')
@@ -30,7 +28,6 @@ class EventDispatcherTest extends TestCase
         $classDispatcher->expects($this->once())->method('get')->with($class)->willReturn($genericDispatcher);
         
         $dispatcher = new EventDispatcher($classDispatcher);
-        $dispatcher->setContainer($container);
         
         $dispatcher->dispatch($eventName, $event);
     }
