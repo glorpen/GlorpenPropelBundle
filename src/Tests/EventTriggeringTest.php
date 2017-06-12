@@ -24,8 +24,6 @@ use Glorpen\Propel\PropelBundle\Connection\EventPropelPDO;
 
 use Glorpen\Propel\PropelBundle\Services\ContainerAwareModel;
 
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
-
 use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
 
 use Glorpen\Propel\PropelBundle\Tests\PropelTestCase;
@@ -41,6 +39,7 @@ use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SoftdeleteTable;
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\om\BaseSoftdeleteTableQuery;
 use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcher;
 use Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcher as SymfonyEventDispatcher;
 
 /**
  * @author Arkadiusz Dzięgiel
@@ -63,7 +62,7 @@ class EventTriggeringTest extends PropelTestCase
         
         EventDispatcherProxy::setDispatcherGetter(function () use ($that) {
             $c = $that->getContainer();
-            $d = new \Symfony\Component\EventDispatcher\EventDispatcher();
+            $d = new SymfonyEventDispatcher();
             
             $d->addListener('model.construct', array(new ContainerAwareModel($c), 'onModelConstruct'));
             
@@ -315,8 +314,7 @@ class EventTriggeringTest extends PropelTestCase
         $order = array();
         
         EventDispatcherProxy::setDispatcherGetter(function () use ($that, &$order) {
-            $c = $that->getContainer();
-            $d = new ContainerAwareEventDispatcher($c);
+            $d = new SymfonyEventDispatcher();
                 
             $d->addListener('model.delete.pre', function ($e) use ($that, &$order) {
                 $order[] = 'model.delete.pre';

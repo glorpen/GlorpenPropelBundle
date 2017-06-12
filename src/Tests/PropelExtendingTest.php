@@ -11,25 +11,15 @@
 namespace Glorpen\Propel\PropelBundle\Tests;
 
 use Glorpen\Propel\PropelBundle\Services\PropelClassFinder;
-
 use Glorpen\Propel\PropelBundle\Services\OMClassOverrider;
-
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
-
+use Symfony\Component\EventDispatcher\EventDispatcher as SymfonyEventDispatcher;
 use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-
 use Glorpen\Propel\PropelBundle\Tests\PropelTestCase;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookQuery;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\BookPeer;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThingQuery;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\SiThing;
-
 use Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\TestOMProvider;
 
 /**
@@ -61,8 +51,7 @@ class PropelExtendingTest extends PropelTestCase
         $that = $this;
         $overrider = new OMClassOverrider(PropelExtendingTest::$map);
         EventDispatcherProxy::setDispatcherGetter(function () use ($that, $overrider) {
-            $c = $that->getContainer();
-            $d = new ContainerAwareEventDispatcher($c);
+            $d = new SymfonyEventDispatcher();
             
             $d->addListener('om.detect', array($overrider, 'onDetectionRequest'));
                 

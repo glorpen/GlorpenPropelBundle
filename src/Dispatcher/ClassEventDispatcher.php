@@ -18,7 +18,7 @@ class ClassEventDispatcher
     
     /**
      * @param string $class
-     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+     * @return \Symfony\Component\EventDispatcher\EventDispatcher
      */
     public function get($class)
     {

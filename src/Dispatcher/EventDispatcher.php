@@ -1,13 +1,10 @@
 <?php
 namespace Glorpen\Propel\PropelBundle\Dispatcher;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher as SymfonyEventDispatcher;
 
 /**

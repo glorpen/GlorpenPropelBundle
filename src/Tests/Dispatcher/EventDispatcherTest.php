@@ -6,7 +6,6 @@ use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcher;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher;
 use Glorpen\Propel\PropelBundle\Events\ModelEvent;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +18,7 @@ class EventDispatcherTest extends TestCase
     
     protected function assertClassEvent($event, $eventName, $class)
     {
-        $genericDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher')
+        $genericDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcher')
             ->disableOriginalConstructor()->getMock();
         $classDispatcher = $this->getMockBuilder('Glorpen\Propel\PropelBundle\Dispatcher\ClassEventDispatcher')
             ->disableOriginalConstructor()->getMock();
