@@ -94,7 +94,7 @@ If you didn't import *config.yml* providen by this bundle, you have to add *even
 
    propel:
      build_properties:
-       propel.behavior.event.class: 'vendor.glorpen.propel-bundle.Glorpen.Propel.PropelBundle.Behaviors.EventBehavior'
+       propel.behavior.event.class: 'vendor.glorpen.propel-bundle.src.Behaviors.EventBehavior'
        propel.behavior.default: "event"
      dbal:
        classname: Glorpen\Propel\PropelBundle\Connection\EventPropelPDO
