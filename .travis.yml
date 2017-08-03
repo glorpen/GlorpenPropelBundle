@@ -1,6 +1,7 @@
 language: php
 
 before_script:
+  - phpenv config-add ci/x_php.ini
   - composer require "symfony/symfony:${SYMFONY_VERSION}" "propel/propel-bundle:${PROPEL_VERSION:-1.*}" symfony/framework-bundle:"${FRAMEWORK_VERSION:-*}"
 
 script:
