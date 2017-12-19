@@ -26,5 +26,7 @@ matrix:
       env: SYMFONY_VERSION="^3.3" PROPEL_VERSION="1.6.x-dev"
     - php: 7.1
       env: SYMFONY_VERSION="^3.3" PROPEL_VERSION="1.6.x-dev"
-    - php: 7.1
+    - php: 7.2
+      env: SYMFONY_VERSION="4.0.2 as 3.99" PROPEL_VERSION="1.6.x-dev" FRAMEWORK_VERSION="4.0.2 as 3.99"
+    - php: 7.2
       env: SYMFONY_VERSION="4.0.x-dev as 3.99" PROPEL_VERSION="1.6.x-dev" FRAMEWORK_VERSION="4.0.x-dev as 3.99"
