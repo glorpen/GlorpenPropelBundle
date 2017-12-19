@@ -12,8 +12,8 @@ namespace Glorpen\Propel\PropelBundle\Tests;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 
 class TestKernel extends Kernel
 {
@@ -60,14 +60,18 @@ class TestKernel extends Kernel
     }
     
     /**
-     * For symfony 3.3
+     * For symfony 3.3 and Propel 1
      * @param ContainerBuilder $container
      */
     protected function build(ContainerBuilder $container)
     {
+        // Support for Symfony 3.3
         if ($this->containerBuilder) {
             call_user_func($this->containerBuilder, $container);
         }
+        
+        // Fix services from Propel 1
+        $container->addCompilerPass(new FixingCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING, 1000);
     }
     
     public function setContainerBuilder($callback)

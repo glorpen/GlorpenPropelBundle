@@ -57,6 +57,7 @@ class SymfonyServicesTest extends WebTestCase
     public function builderForTestServiceWiring(ContainerBuilder $c)
     {
         $def = $c->register('test.events1', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->setPublic(true);
         $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
     }
     
@@ -70,6 +71,7 @@ class SymfonyServicesTest extends WebTestCase
     public function builderForTestPublicCircuralDependencies(ContainerBuilder $c)
     {
         $def = $c->register('test.events1', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->setPublic(true);
         $def->addArgument(new Reference('glorpen.propel.event.dispatcher'));
         $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
     }
@@ -92,6 +94,7 @@ class SymfonyServicesTest extends WebTestCase
         $def->addTag('propel.event', array('event'=>'model.save', 'method'=>'handleEvent'));
         
         $def = $c->register('test.events_tracker', 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Services\EventTester');
+        $def->setPublic(true);
         $def->addArgument(new Reference('test.events1'));
     }
     
@@ -100,7 +103,7 @@ class SymfonyServicesTest extends WebTestCase
         $c = $this->prepareEventTester(array($this, 'builderForTestPrivateCircuralDependencies'));
         
         $te = $c->get('test.events_tracker')->arg1;
-            
+        
         $this->assertNotNull($te->arg1, 'EventDispatcher was injected');
         $this->assertNotNull($te->handledEvent, 'Event was handled');
     }
