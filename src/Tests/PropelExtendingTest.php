@@ -41,10 +41,10 @@ class PropelExtendingTest extends PropelTestCase
         $this->loadAndBuild();
     }
     
-    static protected $extendedClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedBook';
-    static protected $modelClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book';
+    protected static $extendedClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\ExtendedBook';
+    protected static $modelClass = 'Glorpen\Propel\PropelBundle\Tests\Fixtures\Model\Book';
     
-    static public $map;
+    public static $map;
     
     protected function setUpListener()
     {

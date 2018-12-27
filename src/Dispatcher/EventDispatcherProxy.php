@@ -11,8 +11,8 @@ use Symfony\Component\EventDispatcher\Event;
 class EventDispatcherProxy
 {
     
-    static private $dispatcher = null;
-    static private $dispatcher_args = array();
+    private static $dispatcher = null;
+    private static $dispatcher_args = array();
     
     /**
      * Sets dispatcher getter

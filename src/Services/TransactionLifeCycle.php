@@ -17,7 +17,7 @@ use Glorpen\Propel\PropelBundle\Events\ConnectionEvent;
 class TransactionLifeCycle implements EventSubscriberInterface
 {
     
-    static protected $events = array('save','update','insert','delete');
+    protected static $events = array('save','update','insert','delete');
     
     protected $models = array();
     protected $processedModels=array();

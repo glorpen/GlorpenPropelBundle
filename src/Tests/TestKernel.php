@@ -21,7 +21,7 @@ class TestKernel extends Kernel
     
     private $containerBuilder;
     
-    static private $nameSeed = 0;
+    private static $nameSeed = 0;
     
     public function getName()
     {
