@@ -29,7 +29,7 @@ class PropelEventPass implements CompilerPassInterface
                 $isClass = !empty($tag['class']);
                 
                 if ($isListener) {
-                    $priority = (int) @$tag['priority'];
+                    $priority = array_key_exists('priority', $tag) ? (int)$tag['priority'] : 0;
                     
                     if ($isClass) {
                         $classDefinition->addMethodCall('addListener', array(
